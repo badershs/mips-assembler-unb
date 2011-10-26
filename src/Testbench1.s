@@ -4,6 +4,10 @@
 		beq $t0,$zero,Error
 		sub $t3,$t2,$t1
 		sll $t4,$t3,2
+		
+		lw	$t5, $
+		
+add:		j	add		
 
 End:	j End
 

@@ -40,6 +40,6 @@
 
 Label:		add	$t1, $t2, $t3
 #Label:		add	$t1, $t2, $t3
-
+		addi	$t1, $t2, 1+5
 
 End:		j	End

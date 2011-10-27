@@ -26,6 +26,7 @@ typedef struct token_s {
 } token;
 
 typedef struct token_list_s {
+    uint16_t index;
     token* first_token;
     struct token_list_s * next;
 } token_list;

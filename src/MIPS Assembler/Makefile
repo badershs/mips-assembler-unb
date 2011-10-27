@@ -1,10 +1,13 @@
+CC = gcc
+CFLAGS = -ansi -c -Wall
+
 all: hello
 
-hello: test.o
-	gcc -o hello test.o
+hello: lexical_analyzer.o
+	$(CC) -o hello lexical_analyzer.o
 
-test.o: test.c mips_assembler.h
-	gcc -c test.c
+lexical_analyzer.o: lexical_analyzer.c mips_assembler.h
+	$(CC) $(CFLAGS) lexical_analyzer.c
 
 clean:
-	rm -rf *o hello
+	rm -rf hello *.o *~

@@ -20,6 +20,11 @@
 #define TK_REG_ENC	(0x05)
 #define TK_IMM		(0x06)
 
+/* --------------------------- Instruction types --------------------------- */
+#define INSTR_R		(0x01)
+#define INSTR_I		(0x02)
+#define INSTR_J		(0x03)
+
 /* ------------------------------ Error codes  ----------------------------- */
 #define ERR_TK_INV		(0x01)
 #define ERR_TK_REG_INV		(0x02)
@@ -38,5 +43,26 @@ typedef struct token_list_st {
     token* first_token;
     struct token_list_st * next;
 } token_list;
+
+typedef struct instr_st {
+    uint8_t op;
+    uint8_t rs;
+    uint8_t rt;
+    uint8_t rd;
+    uint8_t shamt;
+    uint8_t funct;
+    uint16_t immediate;
+    unsigned int address;
+    struct instr_st *next;
+} instr;
+
+typedef struct instr_list_st {
+    uint16_t index;
+    uint8_t type;
+    instr* first_instr;
+    struct instr_list_st *next;
+} instr_list;
+
+
 
 #endif

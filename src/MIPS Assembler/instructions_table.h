@@ -2,7 +2,8 @@
 #define INSTRUCTIONS_TABLE_H
 
 #include <stdint.h>
-
+/*Observação -  As instruções ainda estão incompletas, aí eu só coloquei uns valores para teste, 
+ aí peço que tomem cuidado ao usar a TI*/
 /* INSTRUCTION TYPES */
 #define TYPE_R		(0x01)
 #define TYPE_I		(0x02)

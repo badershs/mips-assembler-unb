@@ -8,6 +8,9 @@
 ** -------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 #include "string_man.h"
 #include "lexical_analyzer.h"
@@ -20,7 +23,6 @@ int main(){
 	}
 	else
 		printf("Error opening file\n");
-    
     
     return 0;
 }

@@ -9,6 +9,7 @@
 		lw	$t0, ($t1)
 		addi	$t0, $t1, -8		
 
-End:	j End
+
+End:	j End 
 
 Error:	j Error

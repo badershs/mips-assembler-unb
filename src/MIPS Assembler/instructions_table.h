@@ -2,14 +2,15 @@
 #define INSTRUCTIONS_TABLE_H
 
 #include <stdint.h>
-/*Observação -  As instruções ainda estão incompletas, aí eu só coloquei uns valores para teste, 
- aí peço que tomem cuidado ao usar a TI*/
+
 /* INSTRUCTION TYPES */
 #define TYPE_R		(0x01)
 #define TYPE_I		(0x02)
 #define TYPE_J		(0x03)
 
 /* INSTRUCTION SUBTYPES */
+/* Sugiro colocar na ordem crescente a partir do 0, para fazer sentido com a tabela de gramatica criada para no arq .c, se cada um desses subtipos for associado a uma sintaxe especifica  */
+#define NB_STYPE	(0x08)
 #define STYPE_R1	(0x01)
 #define STYPE_R2	(0x02)
 #define STYPE_R3	(0x03)
@@ -52,5 +53,10 @@ typedef struct {
     uint8_t opcode;
     uint8_t funct;
 } instruction;
+
+typedef struct inst_order_st {
+    uint8_t n;
+    uint8_t *list;
+} inst_order;
 
 #endif

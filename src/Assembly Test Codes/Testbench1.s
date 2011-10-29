@@ -6,7 +6,7 @@
 		sll 	$t4,$t3,2
 		
 		
-		addi	$t0, $t1, 000a00
+		lw	$t0, ($t1)
 		addi	$t0, $t1, -8		
 
 End:	j End

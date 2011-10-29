@@ -34,13 +34,19 @@
 
 /* ------------------------------ Error codes  ----------------------------- */
 #define ERR_NO_ERROR		(0x00)
-#define ERR_TK_INV			(0x01)
+
+#define ERR_TK_INV		(0x01)
 #define ERR_TK_REG_INV		(0x02)
 #define ERR_TK_IMM_INV		(0x03)
 #define ERR_TK_SYMBOL_INV	(0x04)
 #define ERR_MISA_BRACKET	(0x10)		/* Missaligned Brackets	     */
 #define ERR_MISP_BRACKET	(0x11)		/* Misplaced Brackets	     */
 #define ERR_MISP_COLON		(0x12)		/* Misplaced Colon	     */
+#define ERR_MISS_BRACKET	(0x13)		/* Missing Brackets	     */
+#define ERR_EXTRA_BRACKET	(0x14)		/* Extra Brackets	     */
+#define ERR_MANY_ARG		(0x20)		/* Too many arguments	     */
+#define ERR_FEW_ARG		(0x21)		/* Too few arguments	     */
+#define ERR_TYPE		(0x22)		/* Incorrect argument type   */
 
 /* ---------------------------------------------------------------------------
 **								TYPEDEFS

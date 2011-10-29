@@ -3,3 +3,13 @@ Nenhuma duvida
 Ja falamos com o professor.
 
 Minha primeira alteração! - Caio Gustavo
+
+Então, já comecei a montar o instruction_table.c, mas estou com umas dúvidas.
+	1. Como é que vai ser a função de entrada, ou melhor quais os parâmetros que tenho que usar.
+	2. Gostaria que fosse visto como está sendo montada a parta das tabelas, caso tiverem notarem
+	algo que eu possa ajeitar, ficaria grato no toque.
+	3. E dei uma atualizada na parte da tabela que o andré me passou, ainda não terminei de ajeitar.
+
+Caio:
+Olá a todos. Bom... tenho uma dúvida... esses subtipos são diretamente relacionados à ordenação da instrução, ou seja, a ordem do que vem após o operador. Ex: Reg, Reg, Imediato ?
+E sugiro criarmos uma lista de defines para cada um dos 45 operadores básicos (a princípio só com os já estipulados) para que seja um identificador individual, na mesma ordem que está na tabela de instruções, para que, com o identificador do operador, possamos saber seu opcode, seu funct, seu subtipo, etc.

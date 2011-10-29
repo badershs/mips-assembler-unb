@@ -44,7 +44,7 @@ typedef struct token_list_st {
     struct token_list_st * next;
 } token_list;
 
-typedef struct instr_st {
+typedef struct inst_st {
     uint8_t op;
     uint8_t rs;
     uint8_t rt;
@@ -53,15 +53,15 @@ typedef struct instr_st {
     uint8_t funct;
     uint16_t immediate;
     unsigned int address;
-    struct instr_st *next;
-} instr;
+    struct inst_st *next;
+} inst;
 
-typedef struct instr_list_st {
+typedef struct inst_list_st {
     uint16_t index;
     uint8_t type;
-    instr* first_instr;
-    struct instr_list_st *next;
-} instr_list;
+    instr* first_inst;
+    struct inst_list_st *next;
+} inst_list;
 
 
 

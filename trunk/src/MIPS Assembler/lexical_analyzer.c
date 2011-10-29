@@ -13,210 +13,220 @@
 #include <ctype.h>
 
 #include "mips_assembler.h"
+#include "lexical_analyzer.h"
+#include "string_man.h"
 
-#define MAX_LINE_LEN 128
-#define MAX_REG_LEN 5
+const char delim[] = " ,\n\t";
+const char opr[] = ":()";
 
-const char token_delim[] = " ,\n\t";
+uint8_t flag_enclosed;
 
-int lexical_analysis(FILE*);
-int classify_token(char*, token**);
-void print_line_list(token_list*);
-void print_token_list(token*);
-
-int main() {
-    FILE* file = fopen("Testbench.s","r");
-    if(file != NULL){
-	lexical_analysis(file);
-	fclose(file);
-    }
-    else
-	printf("Error opening file\n");
-    return 0;
-}
-
-int lexical_analysis(FILE* file) {
-    
-    /* Declare variables */
-    int line_count = 0;
-    char line[MAX_LINE_LEN];
-    char* tok;
-    uint8_t error;
-    
-    token *cur_token, *next_token;
-    token_list *list, *cur_list, *next_list;
-    
-    list = NULL;
-    
-    /* Read a whole line */
-    while ( fgets ( line, sizeof line, file ) != NULL ){
+int lexical_analysis(FILE* file)
+{
+	/* Declare variables */
+	int res;
+	uint16_t code_count;
+	uint16_t inst_count;
+	char line[MAX_LINE_LEN];	
 	
-	/* Take the first token of the line */
-	tok = strtok(line, token_delim);
+	string_list* line_tokens;
+	token *first_token, *cur_token, *next_token;
+	token_list *list, *cur_list, *next_list;
 	
-	/* If the line is not null a new line struct should be created and
-	linked with the lines list */
-	if(tok != NULL){
-	    next_list = (token_list*)malloc(sizeof(token_list));
-	    
-	    /* Creating the first line structure, nothing to link with */
-	    if(list == NULL){
-		list = next_list;
-	    }
-	    
-	    /* Linking with the last added line */
-	    else{
-		cur_list->next = next_list;
-	    }
-	    
-	    cur_list = next_list;
-	    cur_list->index = line_count++;
-	    
-	    /* Classifying the first token and adding it to the line */
-	    if((error = classify_token(tok, &next_token)) != 0){
-		printf("ERROR: %d\n", error); break;
-	    }
-	    
-	    cur_list->first_token = next_token;
-	    cur_token = next_token;
-	    
-	    /* Analyzing following tokens */
-	    tok = strtok(NULL, token_delim);
-	    while(tok != NULL){
-		if((error = classify_token(tok, &next_token)) != 0){
-		    printf("ERROR: %d\n", error); break;
-		}
-		cur_token->next = next_token;
-		cur_token = next_token;
+	code_count = 1;
+	inst_count = 0;
+	flag_enclosed = 0;
+	
+	first_token = NULL;
+	list = NULL;
+	
+	/* Read a whole line */
+	while ( fgets ( line, sizeof line, file ) != NULL ){
 		
-		tok = strtok(NULL, token_delim);
-	    }
+		/* Divide it in a list of strings */
+		line_tokens = string_tokenizer(line, (char*)delim, (char*)opr);
+		
+		/* For each string verify, clasify it an generate a token */
+		while(line_tokens != NULL){
+			
+			/* Firstly, decode special operators */
+			/* Colon - If the previous token was a symbol, make it a label, 
+				otherwise an error is generated */
+			if(*(line_tokens->string) == ':'){
+				if(cur_token == NULL)
+					print_error_msg(code_count, ERR_MISP_COLON);
+				else{
+					if(cur_token->type == TK_SYMBOL)
+						cur_token->type = TK_LABEL;
+					else
+						print_error_msg(code_count, ERR_MISP_COLON);
+				}
+			}
+			
+			/* Opening bracket - Check if there is a matching closing bracket. 
+				If yes, remove the closing bracket from the string listand set
+				the 'encapsulated' flag */
+			else if(*(line_tokens->string) == '('){
+				if(*(line_tokens->next->next->string) == ')'){
+					if(*(line_tokens->next->string) == '$'){
+						line_tokens->next->next = line_tokens->next->next->next;
+						flag_enclosed = 1;
+					}
+					else
+						print_error_msg(code_count, ERR_MISP_BRACKET);
+				}
+				else
+					print_error_msg(code_count, ERR_MISA_BRACKET);
+			}
+			
+			/* Isolated closing bracket - error */
+			else if(*(line_tokens->string) == ')'){
+				print_error_msg(code_count, ERR_MISA_BRACKET);
+			}
+			
+			/* Normal strings */
+			else{				
+				/* Generate a new token */
+				next_token = (token*)malloc(sizeof(token));
+				
+				if((res = classify_token(line_tokens->string, next_token)) != ERR_NO_ERROR)
+					print_error_msg(code_count, res);
+				
+				/* Classify the current string */
+				/* The hard part:
+					classify the token and fill its fields
+					*/
+				/*next_token->value_s = (char*)malloc(strlen(line_tokens->string) + 1);
+				strcpy(next_token->value_s, line_tokens->string);
+				next_token->value = 8;
+				next_token->type = TK_SYMBOL;*/
+				
+				/* Adding the first token of the line */
+				if(first_token == NULL)
+					first_token = next_token;
+				
+				/* Connecting the token to the last one added */
+				else
+					cur_token->next = next_token;
+				cur_token = next_token;
+			}
+			
+			/* Take next string */
+			line_tokens = line_tokens->next;
+		}
+		
+		if(first_token != NULL){
+			next_list = (token_list*)malloc(sizeof(token_list));
+			next_list->index = inst_count++;
+			next_list->first_token = first_token;
+			
+			if(list == NULL)
+				list = next_list;
+			
+			else
+				cur_list->next = next_list;
+			
+			cur_list = next_list;
+			first_token = NULL;			
+		}		
+		code_count++;
 	}
-    }
-    
-    print_line_list(list);
-    
-    return 0;
+	
+	print_line_list(list);
+
+	return 0;
 }
 
-int classify_token(char* tok, token** token_item){
-    char reg_tok[MAX_REG_LEN];
-    uint8_t reg_enc;
-    
-    /* Case TK_REG  and TK_REG_ENC */
-    if(*tok == '(' || *tok == '$'){
+int classify_token(char* tok, token* token_item)
+{
+	int16_t imm_value;
+	int res;
+	uint8_t flag_negative = 0;
 	
-	/* Case TK_REG_ENC - check if brackets are aligned and copy the
-	register name to reg_tok */
-	if(*tok == '('){
-	    if(*(tok + strlen(tok) - 2) != ')')
-		return ERR_MISA_BRACKET;
-	    if(*(tok + 1) != '$')
-		return ERR_MISU_BRACKET;
-	    if(strlen(tok) > MAX_REG_LEN + 2)
-		return ERR_TK_REG_INV;
-	    else {
-		strncpy(reg_tok, tok+2, strlen(tok) - 3);
-		reg_enc = 1;
-	    }
+	if(*tok == '$'){
+		/*************** TEMPORARY CODE *************************/
+		/* Instead of if(1) it should search in the registers table */
+		/* Instead of 12 it should put the correct value of the reg */
+		if(1){
+			token_item->value = 12;
+		/*************** TEMPORARY CODE *************************/
+			
+			
+			if(flag_enclosed){
+				token_item->type = TK_REG_ENC;
+				flag_enclosed = 0;
+			}
+			else
+				token_item->type = TK_REG;
+		}
+		else
+			return ERR_TK_REG_INV;
+		
+	}
+	else if(*tok == '-' || isdigit(*tok)){
+		if(*tok == '-'){
+			flag_negative = 1;
+			strcpy(tok, tok+1);
+		}
+		if(*tok == '0'){
+			if(strlen(tok) == 1)
+				imm_value = 0;
+			else{
+				if(*(tok+1) == 'x' || *(tok+1) == 'X')
+					res = str_to_num(tok+2, &imm_value, 16);
+				else if(*(tok+1) == 'b' || *(tok+1) == 'B')
+					res = str_to_num(tok+2, &imm_value, 2);
+				else
+					res = str_to_num(tok+1, &imm_value, 8);
+			}
+		}
+		else{
+			res = str_to_num(tok, &imm_value, 10);
+		}
+		
+		if(res == ERR_NO_ERROR){
+			if(flag_negative){
+				token_item->value = -imm_value;
+				flag_negative = 0;
+			}
+			else
+				token_item->value = imm_value;
+			token_item->type = TK_IMM;
+		}
+		else
+			return ERR_TK_IMM_INV;
+	}
+	else{
+		
+		/* classify tok into INST, SYMBOL or INV */
+		
+		token_item->value_s = (char*)malloc(strlen(tok)+1);
+		strcpy(token_item->value_s, tok);
+		token_item->value = 5;
+		token_item->type = TK_SYMBOL;
 	}
 	
-	/* Case TK_REG - copy the register name to reg_tok */
-	else{
-	    if(strlen(tok) > MAX_REG_LEN)
-		return ERR_TK_REG_INV;
-	    else {
-		strncpy(reg_tok, tok+1, strlen(tok) - 1);
-		reg_enc = 0;
-	    }
-	}
-	
-	/* CHECK THE REGISTERS TABLE
-	    This table should contain a list of all existing registers and
-	    a code associated to each register*/
-	
-	/* If reg_tok is in the table */
-	if(0)
-	    return ERR_TK_REG_INV;   
-	
-	else{
-	    (*token_item) = (token*)malloc(sizeof(token));
-	    (*token_item)->value_s = (char*)malloc(strlen(reg_tok)+1);
-	    strcpy((*token_item)->value_s, reg_tok);
-	    (*token_item)->value = 2;	/* THIS VALUE SHOULD BE TAKEN FROM THE TABLE */
-	    if(reg_enc)
-		(*token_item)->type = TK_REG_ENC;
-	    else
-		(*token_item)->type = TK_REG;
-	}	    
-    } 
- 
-    /* Case TK_IMM */
-    if(*tok == '-' || isdigit(*tok)){
-	
-	/* Convert number in different notations (binary, octal, decimal, hexadecimal */
-	
-	(*token_item) = (token*)malloc(sizeof(token));
-	(*token_item)->value_s = (char*)malloc(strlen(tok)+1);
-	strcpy((*token_item)->value_s, tok);
-	(*token_item)->value = 8;
-	(*token_item)->type = TK_IMM;
-    
-    }
-    
-    /* Case TK_INST, TK_SYMBOL and TK_LABEL */
-    else{
-	
-	
-	
-	
-	(*token_item) = (token*)malloc(sizeof(token));
-	(*token_item)->value_s = (char*)malloc(strlen(tok)+1);
-	strcpy((*token_item)->value_s, tok);
-	(*token_item)->value = 5;
-	(*token_item)->type = TK_SYMBOL;
-    }
- 
-    return 0;
+	return ERR_NO_ERROR;
 }
 
 void print_line_list(token_list* list){
-    token_list* cur_list = list;
-    while(cur_list != NULL){
-	printf("LINE %d :\n",cur_list->index);
-	if(cur_list->first_token != NULL)
-	    print_token_list(cur_list->first_token);
-	cur_list = cur_list->next;
-    }
-    return;
+	token_list* cur_list = list;
+	while(cur_list != NULL){
+		printf("LINE %d :\n",cur_list->index);
+		if(cur_list->first_token != NULL)
+			print_token_list(cur_list->first_token);
+		cur_list = cur_list->next;
+	}
+	return;
 }
 
 void print_token_list(token* token_item){
-    token* tk = token_item;
-    while(tk != NULL){
-	printf("Token: type = %d, value = %d, value_s = %s\n",tk->type, tk->value, tk->value_s);
-	tk = tk->next;
-    }
-    
-    return;
+	token* tk = token_item;
+	while(tk != NULL){
+		printf("Token: type = %d, value = %d, value_s = %s\n",tk->type, tk->value, tk->value_s);
+		tk = tk->next;
+	}
+	
+	return;
 }
-
-/* CLASSIFYING THE TOKEN 
-    - If starts with number, try to cast it to int - it should be an IMM
-    - If starts with $, check on the registers table - it should be a REG
-    - If starts with (, check if there is a ) at the end, and check if the 
-    string between them is a register - it should be a REG_BRACKET
-    - If starts with a letter, check on the instructions table - if yes it is a INST
-    - If it starts with a letter but is not on the instructions table it
-    should be a SYMBOL
-	    check for invalid characters
-    - If it is a single :, check the previous token. If it is a SYMBOL, make it
-    a LABEL
-    - Otherwise, ERROR */
-	
-	
-	
-	
-	
-	
 	

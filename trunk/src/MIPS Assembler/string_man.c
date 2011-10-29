@@ -141,7 +141,7 @@ int string_tokenizer_opr(string_list** plist, char* opr)
     return 0;
 }
 
-int str_to_num(char* str, int16_t* num, uint8_t base)
+int str_to_num(char* str, int32_t* num, uint8_t base)
 {
 	/* TBD: Convert str to num */
 	

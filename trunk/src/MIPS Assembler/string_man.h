@@ -53,7 +53,7 @@ int string_tokenizer_opr(string_list** plist, char* opr);
 ** variable (int). The number can be in any 'base'. The result is 0 if the
 ** operation succeeds or -1 if the string contains invalid characters.
 ** -------------------------------------------------------------------------*/
-int str_to_num(char* str, int16_t* num, uint8_t base);
+int str_to_num(char* str, int32_t* num, uint8_t base);
     
 
 #endif	/* STRING_MAN_H */

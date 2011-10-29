@@ -16,8 +16,11 @@
 #include "lexical_analyzer.h"
 #include "string_man.h"
 
+extern const register_name reg_table[];
+extern const instruction inst_table[];
+
 const char delim[] = " ,\n\t";
-const char opr[] = ":()";
+const char opr[] = ":()#";
 
 uint8_t flag_enclosed;
 
@@ -25,8 +28,8 @@ int lexical_analysis(FILE* file)
 {
 	/* Declare variables */
 	int res;
-	uint16_t code_count;
-	uint16_t inst_count;
+	uint32_t code_count;
+	uint32_t inst_count;
 	char line[MAX_LINE_LEN];	
 	
 	string_list* line_tokens;
@@ -84,6 +87,10 @@ int lexical_analysis(FILE* file)
 				print_error_msg(code_count, ERR_MISA_BRACKET);
 			}
 			
+			else if(*(line_tokens->string) == '#'){
+				break;
+			}
+			
 			/* Normal strings */
 			else{				
 				/* Generate a new token */
@@ -91,15 +98,6 @@ int lexical_analysis(FILE* file)
 				
 				if((res = classify_token(line_tokens->string, next_token)) != ERR_NO_ERROR)
 					print_error_msg(code_count, res);
-				
-				/* Classify the current string */
-				/* The hard part:
-					classify the token and fill its fields
-					*/
-				/*next_token->value_s = (char*)malloc(strlen(line_tokens->string) + 1);
-				strcpy(next_token->value_s, line_tokens->string);
-				next_token->value = 8;
-				next_token->type = TK_SYMBOL;*/
 				
 				/* Adding the first token of the line */
 				if(first_token == NULL)
@@ -117,7 +115,8 @@ int lexical_analysis(FILE* file)
 		
 		if(first_token != NULL){
 			next_list = (token_list*)malloc(sizeof(token_list));
-			next_list->index = inst_count++;
+			next_list->index = inst_count;
+			inst_count += 4;
 			next_list->first_token = first_token;
 			
 			if(list == NULL)
@@ -139,71 +138,59 @@ int lexical_analysis(FILE* file)
 
 int classify_token(char* tok, token* token_item)
 {
-	int16_t imm_value;
-	int res;
-	uint8_t flag_negative = 0;
+	int i;
+	int32_t imm_value;
+	char* endptr;
 	
 	if(*tok == '$'){
-		/*************** TEMPORARY CODE *************************/
-		/* Instead of if(1) it should search in the registers table */
-		/* Instead of 12 it should put the correct value of the reg */
-		if(1){
-			token_item->value = 12;
-		/*************** TEMPORARY CODE *************************/
-			
-			
-			if(flag_enclosed){
-				token_item->type = TK_REG_ENC;
-				flag_enclosed = 0;
+		for(i = 0; i < REG_TABLE_SIZE; i++){
+			if(strcmp(tok, reg_table[i].name1) == 0 || strcmp(tok, reg_table[i].name2) == 0){
+				token_item->value = i;
+				if(flag_enclosed){
+					token_item->type = TK_REG_ENC;
+					flag_enclosed = 0;
+				}
+				else
+					token_item->type = TK_REG;
+				
+				return ERR_NO_ERROR;
 			}
-			else
-				token_item->type = TK_REG;
 		}
-		else
-			return ERR_TK_REG_INV;
-		
+		return ERR_TK_REG_INV;		
 	}
 	else if(*tok == '-' || isdigit(*tok)){
-		if(*tok == '-'){
-			flag_negative = 1;
-			strcpy(tok, tok+1);
-		}
-		if(*tok == '0'){
-			if(strlen(tok) == 1)
-				imm_value = 0;
-			else{
-				if(*(tok+1) == 'x' || *(tok+1) == 'X')
-					res = str_to_num(tok+2, &imm_value, 16);
-				else if(*(tok+1) == 'b' || *(tok+1) == 'B')
-					res = str_to_num(tok+2, &imm_value, 2);
-				else
-					res = str_to_num(tok+1, &imm_value, 8);
-			}
-		}
-		else{
-			res = str_to_num(tok, &imm_value, 10);
-		}
-		
-		if(res == ERR_NO_ERROR){
-			if(flag_negative){
-				token_item->value = -imm_value;
-				flag_negative = 0;
-			}
-			else
-				token_item->value = imm_value;
+		imm_value = strtol(tok, &endptr, 0);
+		if((tok + strlen(tok) - endptr) == 0){
+			token_item->value = imm_value;
 			token_item->type = TK_IMM;
 		}
 		else
 			return ERR_TK_IMM_INV;
 	}
 	else{
+		for(i = 0; i < INST_TABLE_SIZE; i++){
+			if(strcmp(tok, inst_table[i].name) == 0){
+				token_item->value = i;
+				token_item->type = TK_INST;
+				
+				return ERR_NO_ERROR;
+			}			
+		}
 		
-		/* classify tok into INST, SYMBOL or INV */
-		
-		token_item->value_s = (char*)malloc(strlen(tok)+1);
-		strcpy(token_item->value_s, tok);
-		token_item->value = 5;
-		token_item->type = TK_SYMBOL;
+		if(strlen(tok) <= 31){
+			for(i = 0; i < strlen(tok); i++){
+				if(*(tok+i) != '.' && *(tok+i) != '_' && isalnum(*(tok+i)) == 0)
+					return ERR_TK_INV;
+			}
+			
+			token_item->value_s = (char*)malloc(strlen(tok)+1);
+			strcpy(token_item->value_s, tok);
+			token_item->type = TK_SYMBOL;
+			
+			return ERR_NO_ERROR;
+		}
+		else
+			return ERR_TK_SYMBOL_INV;
 	}
 	
 	return ERR_NO_ERROR;

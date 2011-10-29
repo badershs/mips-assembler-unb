@@ -6,7 +6,8 @@
 		sll 	$t4,$t3,2
 		
 		
-add:		j	add		
+		addi	$t0, $t1, 000a00
+		addi	$t0, $t1, -8		
 
 End:	j End
 

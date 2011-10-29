@@ -12,6 +12,10 @@
 
 #include <stdint.h>
 
+/* ---------------------------------------------------------------------------
+**								DEFINES
+** -------------------------------------------------------------------------*/
+
 /* ------------------------------ Token types  ----------------------------- */
 #define TK_LABEL	(0x01)	
 #define TK_SYMBOL	(0x02)
@@ -26,11 +30,25 @@
 #define INSTR_J		(0x03)
 
 /* ------------------------------ Error codes  ----------------------------- */
-#define ERR_TK_INV		(0x01)
+#define ERR_NO_ERROR		(0x00)
+#define ERR_TK_INV			(0x01)
 #define ERR_TK_REG_INV		(0x02)
+#define ERR_TK_IMM_INV		(0x03)
 #define ERR_MISA_BRACKET	(0x10)		/* Missaligned Brackets	     */
-#define ERR_MISU_BRACKET	(0x11)		/* Misused Brackets	     */
+#define ERR_MISP_BRACKET	(0x11)		/* Misplaced Brackets	     */
+#define ERR_MISP_COLON		(0x12)		/* Misplaced Colon	     */
 
+/* ---------------------------------------------------------------------------
+**								TYPEDEFS
+** -------------------------------------------------------------------------*/
+
+/* Type: token
+** Description: Holds a token processed by the lexical analyzer from a mips 
+** assembly program. The struct has a field for the token 'type' and two fields
+** for the token value (int and string). The token type determines which value
+** field is going to be used. It also has a pointer to a 'token' struct so that
+** a linked list can be created.
+** -------------------------------------------------------------------------*/
 typedef struct token_st {
     char* value_s;
     int16_t value;
@@ -38,12 +56,21 @@ typedef struct token_st {
     struct token_st * next;
 } token;
 
+/* Type: token_list
+** Description: Implements a linked list for holding tokens. Each node contains
+** an index, a pointer to a 'token' struct and a pointer to the next node.
+** OBS: Remmembering that 'token' structs can produce linked lists, this struct
+** is more commonly used for generating a "list of lists of tokens".
+** -------------------------------------------------------------------------*/
 typedef struct token_list_st {
     uint16_t index;
     token* first_token;
     struct token_list_st * next;
 } token_list;
 
+/* Type: 
+** Description: 
+** -------------------------------------------------------------------------*/
 typedef struct inst_st {
     uint8_t op;
     uint8_t rs;
@@ -56,13 +83,23 @@ typedef struct inst_st {
     struct inst_st *next;
 } inst;
 
+/* Type: 
+** Description: 
+** -------------------------------------------------------------------------*/
 typedef struct inst_list_st {
     uint16_t index;
     uint8_t type;
-    instr* first_inst;
+    inst* first_inst;
     struct inst_list_st *next;
 } inst_list;
 
+/* ---------------------------------------------------------------------------
+**						  FUNCTION PROTOTYPES
+** -------------------------------------------------------------------------*/
 
+/* Function: print_error_msg
+** Description: Method for printing an error mesage to the user
+** -------------------------------------------------------------------------*/
+void print_error_msg(uint16_t line, uint8_t error);
 
 #endif

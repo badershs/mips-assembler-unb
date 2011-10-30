@@ -27,16 +27,17 @@
 #define TK_LABEL	(0x01)	
 #define TK_SYMBOL	(0x02)
 #define TK_INST		(0x03)
-#define TK_REG		(0x04)
+#define TK_REG		(0x04)	/* TK_REG = TK_REG_X & 0x0F (mask) */
 #define TK_REG_S	(0x14)
 #define TK_REG_T	(0x24)
 #define TK_REG_D	(0x34)
 #define TK_REG_ENC	(0x05)
-#define TK_IMM		(0x06)
+#define TK_IMM		(0x06)	/* TK_IMM = TK_IMM_X & 0x0F */
 #define TK_IMM_5	(0x16)
 #define TK_IMM_16	(0x26)
 #define TK_IMM_26	(0x36)
 #define TK_IMM_OPT	(0x07)
+#define TK_MASK		(0x0F)
 
 /* ------------------------------ Error codes  ----------------------------- */
 #define ERR_NO_ERROR		(0x00)
@@ -52,7 +53,10 @@
 #define ERR_EXTRA_BRACKET	(0x14)		/* Extra Brackets	     */
 #define ERR_MANY_ARG		(0x20)		/* Too many arguments	     */
 #define ERR_FEW_ARG		(0x21)		/* Too few arguments	     */
-#define ERR_TYPE		(0x22)		/* Incorrect argument type   */
+#define ERR_TYPE_ARG		(0x22)		/* Incorrect argument type   */
+#define ERR_MISS_INST		(0x23)		/* Missing instruction	     */
+#define ERR_INV_INST		(0x24)		/* Invalid instruction	     */
+#define ERR_MANY_LABELS		(0x25)		/* Too many labels	     */
 
 /* ---------------------------------------------------------------------------
 **								TYPEDEFS
@@ -94,8 +98,7 @@ typedef struct {
     uint8_t rd;
     uint8_t shamt;
     uint8_t funct;
-    int16_t imm16;
-    int32_t imm26;
+    int32_t imm;
 } inst;
 
 /* Type: 

@@ -24,7 +24,7 @@ const char opr[] = ":()#";
 
 uint8_t flag_enclosed;
 
-int lexical_analysis(FILE* file)
+int lexical_analysis(FILE* file, token_list** list)
 {
 	/* Declare variables */
 	int res;
@@ -34,14 +34,14 @@ int lexical_analysis(FILE* file)
 	
 	string_list* line_tokens;
 	token *first_token, *cur_token, *next_token;
-	token_list *list, *cur_list, *next_list;
+	token_list *cur_list, *next_list;
 	
 	code_count = 1;
 	inst_count = 0;
 	flag_enclosed = 0;
 	
 	first_token = NULL;
-	list = NULL;
+	*list = NULL;
 	
 	/* Read a whole line */
 	while ( fgets ( line, sizeof line, file ) != NULL ){
@@ -67,7 +67,7 @@ int lexical_analysis(FILE* file)
 			}
 			
 			/* Opening bracket - Check if there is a matching closing bracket. 
-				If yes, remove the closing bracket from the string listand set
+				If yes, remove the closing bracket from the string list and set
 				the 'encapsulated' flag */
 			else if(*(line_tokens->string) == '('){
 				if(*(line_tokens->next->next->string) == ')'){
@@ -119,8 +119,8 @@ int lexical_analysis(FILE* file)
 			inst_count += 4;
 			next_list->first_token = first_token;
 			
-			if(list == NULL)
-				list = next_list;
+			if(*list == NULL)
+				*list = next_list;
 			
 			else
 				cur_list->next = next_list;
@@ -131,7 +131,7 @@ int lexical_analysis(FILE* file)
 		code_count++;
 	}
 	
-	print_line_list(list);
+	print_line_list(*list);
 
 	return 0;
 }

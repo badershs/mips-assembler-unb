@@ -31,6 +31,8 @@
 
 /* OPCODES */
 #define OP		(0x03)
+#define OP_R		(0x00)
+#define OP_NOOP		(0x00)
 #define OP_ADD		(0x00)
 #define OP_SUB		(0x00)
 #define OP_AND		(0x00)
@@ -46,6 +48,7 @@
 
 /* FUNCTS */
 #define FN		(0x04)
+#define FN_NOOP		(0x00)
 #define FN_ADD		(0x20)
 #define FN_SUB		(0x22)
 #define FN_AND		(0x24)

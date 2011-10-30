@@ -13,7 +13,7 @@
 
 /* INSTRUCTION SUBTYPES */
 #define STYPE		(0x02)
-#define NB_STYPE	(0x08)
+#define NB_STYPE	(0x0E)
 #define STYPE_R1	(0x00) 	/* ArithLog: 	$d $s $t 	*/
 #define STYPE_R2	(0x01) 	/* DivMult: 	$s $t 		*/
 #define STYPE_R3	(0x02) 	/* JumpR: 	$s 		*/
@@ -67,9 +67,9 @@ typedef struct {
     uint8_t funct;
 } instruction;
 
-typedef struct inst_order_st {
+/*typedef struct inst_order_st {
     uint8_t n;
     uint8_t *list;
-} inst_order;
+} inst_order;*/
 
 #endif

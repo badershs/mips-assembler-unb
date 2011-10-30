@@ -28,8 +28,14 @@
 #define TK_SYMBOL	(0x02)
 #define TK_INST		(0x03)
 #define TK_REG		(0x04)
+#define TK_REG_S	(0x14)
+#define TK_REG_T	(0x24)
+#define TK_REG_D	(0x34)
 #define TK_REG_ENC	(0x05)
 #define TK_IMM		(0x06)
+#define TK_IMM_5	(0x16)
+#define TK_IMM_16	(0x26)
+#define TK_IMM_26	(0x36)
 #define TK_IMM_OPT	(0x07)
 
 /* ------------------------------ Error codes  ----------------------------- */

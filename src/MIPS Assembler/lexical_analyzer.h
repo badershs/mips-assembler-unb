@@ -24,7 +24,7 @@
 /* Function:
 ** Description:
 ** -------------------------------------------------------------------------*/
-int lexical_analysis(FILE*);
+int lexical_analysis(FILE* file, token_list** list);
 
 /* Function:
 ** Description:

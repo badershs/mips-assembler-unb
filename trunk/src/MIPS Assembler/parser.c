@@ -90,7 +90,7 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
 	      else { return ERR_TYPE_ARG; }
 	  }
 	  if( tok->type!=TK_SYMBOL ) { includeininst(sintaxe[code_sint][i],tok->value,&cur_instr); }
-	  else { /*includesymbol(tok->value_s,) PARA INSERIR O VALOR DEVIDO AO SIMBOLO*/ }  
+	  else { cur_instr->values.symbol=tok->value_s;/*includesymbol(tok->value_s,) PARA INSERIR O VALOR DEVIDO AO SIMBOLO*/ }  
       }
  
       /* Preparation for the next line */

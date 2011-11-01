@@ -83,7 +83,12 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
 	  if( (sintaxe[code_sint][i]!=TK_NONE)&&(tok->next==NULL) ) { return ERR_FEW_ARG; }
 	  if( (sintaxe[code_sint][i]==TK_NONE)&&(tok->next==NULL) ) { break; }
 	  tok=tok->next;
-	  if( (sintaxe[code_sint][i] & TK_MASK)!=tok->type ) { return ERR_TYPE_ARG; }
+	  if( (sintaxe[code_sint][i] & TK_MASK)!=tok->type ) 
+	  { 
+	      if( ((sintaxe[code_sint][i] & TK_MASK)==TK_REG) && tok->type==TK_REG_ENC ) { return ERR_EXTRA_BRACKET; }
+	      else if( ((sintaxe[code_sint][i] & TK_MASK)==TK_REG_ENC) && tok->type==TK_REG ) { return ERR_MISS_BRACKET; }
+	      else { return ERR_TYPE_ARG; }
+	  }
 	  if( tok->type!=TK_SYMBOL ) { includeininst(sintaxe[code_sint][i],tok->value,&cur_instr); }
 	  else { /*includesymbol(tok->value_s,) PARA INSERIR O VALOR DEVIDO AO SIMBOLO*/ }  
       }

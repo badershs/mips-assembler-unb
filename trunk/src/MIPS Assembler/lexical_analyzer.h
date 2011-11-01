@@ -21,23 +21,36 @@
 **						  FUNCTION PROTOTYPES
 ** -------------------------------------------------------------------------*/
 
-/* Function:
-** Description:
+/* Function: lexical_analysis
+** Description: Read the input 'file' and perform the lexical analysis. The
+** content of 'file' is split into tokens according to the MIPS assembly
+** language especifications and each token is classified depending on its
+** structure. All the tokens from the same line are organized in linked lists.
+** The parameter 'list' will point to the list of content lines, where each
+** line is the list of tokens mentioned above. In the case any lexical error
+** is found, the function outputs a message error and terminates the process.
+** In the case this behavior is not desire, this function should be called in
+** an independent process.
 ** -------------------------------------------------------------------------*/
 int lexical_analysis(FILE* file, token_list** list);
 
-/* Function:
-** Description:
+/* Function: classify_token
+** Description: Works as a subfunction of lexical_analysis. Verify if 'tok' is
+** a valid token and classify it in one of the following classes: register,
+** label, instruction, immediate. The selected class as well as the token
+** value are stored in the given 'token_item' structure.
 ** -------------------------------------------------------------------------*/
-int classify_token(char*, token*);
+int classify_token(char* tok, token* token_item);
 
-/* Function:
-** Description:
+/* Function: print_line_list
+** Description: For debug purposes. Print a token_list structure's content
+** recursively in the terminal.
 ** -------------------------------------------------------------------------*/
 void print_line_list(token_list*);
 
-/* Function:
-** Description:
+/* Function: print_token_list
+** Description: For debug purposes. Print a token structure's content 
+** recursively in the terminal.
 ** -------------------------------------------------------------------------*/
 void print_token_list(token*);
 

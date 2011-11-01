@@ -79,7 +79,7 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
       /* Treatment of the attributes: REG, REG_ENC, IMM, SYMBOL; using the sintaxe table */
       for( i=0; i<3 ; i++ )
       {
-	  if( (sintaxe[code_sint][i]==TK_NONE)&&(tok->next!=NULL) ) { printf("hey");return ERR_MANY_ARG; }
+	  if( (sintaxe[code_sint][i]==TK_NONE)&&(tok->next!=NULL) ) { return ERR_MANY_ARG; }
 	  if( (sintaxe[code_sint][i]!=TK_NONE)&&(tok->next==NULL) ) { return ERR_FEW_ARG; }
 	  if( (sintaxe[code_sint][i]==TK_NONE)&&(tok->next==NULL) ) { break; }
 	  tok=tok->next;

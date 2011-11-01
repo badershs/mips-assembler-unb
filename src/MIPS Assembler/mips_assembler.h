@@ -99,6 +99,7 @@ typedef struct {
     uint8_t shamt;
     uint8_t funct;
     int32_t imm;
+    char *symbol;
 } inst;
 
 /* Type: 

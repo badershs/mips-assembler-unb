@@ -1,11 +1,11 @@
-/* ---------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
 **  MIPS Assembler UnB - String Manipulator
 **
 **  Description: 
 **
 **  Author:
 **  Project: MIPS Assembler UnB - October 2011
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <string.h>
@@ -104,7 +104,7 @@ int string_tokenizer_opr(string_list** plist, char* opr)
 					strncpy(list_opr->string, pchr, 1);
 					
 					/* (after the "operator") */
-					if(pchr < cur_list->next->string + strlen(cur_list->next->string) - 1){
+					if(asize > 0) {
 						list_after = (string_list*)malloc(sizeof(string_list));
 						list_after->string = (char*)malloc(asize+1);
 						strcpy(list_after->string, pchr+1);
@@ -134,18 +134,8 @@ int string_tokenizer_opr(string_list** plist, char* opr)
 			}
 			cur_list = virtual_list;
 		}
-		
 		*plist = virtual_list->next;
     }
     
     return 0;
-}
-
-int str_to_num(char* str, int32_t* num, uint8_t base)
-{
-	/* TBD: Convert str to num */
-	
-	*num = 42;
-	
-	return 0;
 }

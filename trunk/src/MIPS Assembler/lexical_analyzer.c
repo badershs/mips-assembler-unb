@@ -1,11 +1,11 @@
-/* ---------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
 **  MIPS Assembler UnB - Lexical Analyzer
 **
 **  Description: 
 **
 **  Author:
 **  Project: MIPS Assembler UnB - October 2011
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +17,7 @@
 #include "string_man.h"
 
 extern const register_name reg_table[];
-extern const instruction inst_table[];
+extern const inst_info inst_table[];
 
 const char delim[] = " ,\n\t";
 const char opr[] = ":()#";
@@ -87,6 +87,7 @@ int lexical_analysis(FILE* file, token_list** list)
 				print_error_msg(code_count, ERR_MISA_BRACKET);
 			}
 			
+			/* Sharp sign - comments */
 			else if(*(line_tokens->string) == '#'){
 				break;
 			}
@@ -96,7 +97,11 @@ int lexical_analysis(FILE* file, token_list** list)
 				/* Generate a new token */
 				next_token = (token*)malloc(sizeof(token));
 				
+				/* Analyze the string and fill token information */
 				if((res = classify_token(line_tokens->string, next_token)) != ERR_NO_ERROR)
+					
+					/* In case of error, print the error message on screen
+						OBS: It also therminates the whole process */
 					print_error_msg(code_count, res);
 				
 				/* Adding the first token of the line */
@@ -113,15 +118,22 @@ int lexical_analysis(FILE* file, token_list** list)
 			line_tokens = line_tokens->next;
 		}
 		
+		/* If the line is not empty, add it to the lines list */
 		if(first_token != NULL){
 			next_list = (token_list*)malloc(sizeof(token_list));
 			next_list->index = inst_count;
-			inst_count += 4;
 			next_list->first_token = first_token;
 			
+			/* If the line has only one token inst_count is not updated since
+			it should be an isolated label token */
+			if(first_token->next != NULL)
+				inst_count += 4;
+			
+			/* Adding the first line of the list */
 			if(*list == NULL)
 				*list = next_list;
 			
+			/* Connecting the line to the last one added */
 			else
 				cur_list->next = next_list;
 			
@@ -142,22 +154,31 @@ int classify_token(char* tok, token* token_item)
 	int32_t imm_value;
 	char* endptr;
 	
+	/* Cases TK_REG and TK_REG_ENC */
 	if(*tok == '$'){
 		for(i = 0; i < REG_TABLE_SIZE; i++){
 			if(strcmp(tok, reg_table[i].name1) == 0 || strcmp(tok, reg_table[i].name2) == 0){
 				token_item->value = i;
+				
+				/* Case TK_REG_ENC */
 				if(flag_enclosed){
 					token_item->type = TK_REG_ENC;
 					flag_enclosed = 0;
 				}
+				
+				/* Case TK_REG */
 				else
 					token_item->type = TK_REG;
 				
 				return ERR_NO_ERROR;
 			}
 		}
+		
+		/* Invalid register */
 		return ERR_TK_REG_INV;		
 	}
+	
+	/* Case TK_IMM */
 	else if(*tok == '-' || isdigit(*tok)){
 		imm_value = strtol(tok, &endptr, 0);
 		if((tok + strlen(tok) - endptr) == 0){
@@ -165,11 +186,17 @@ int classify_token(char* tok, token* token_item)
 			token_item->type = TK_IMM;
 		}
 		else
+			
+			/* Invalid number */
 			return ERR_TK_IMM_INV;
 	}
+	
+	/* Cases TK_INST and TK_SYMBOL */
 	else{
 		for(i = 0; i < INST_TABLE_SIZE; i++){
 			if(strcmp(tok, inst_table[i].name) == 0){
+				
+				/* Case TK_INST */
 				token_item->value = i;
 				token_item->type = TK_INST;
 				
@@ -183,6 +210,7 @@ int classify_token(char* tok, token* token_item)
 					return ERR_TK_INV;
 			}
 			
+			/* Case TK_SYMBOL */
 			token_item->value_s = (char*)malloc(strlen(tok)+1);
 			strcpy(token_item->value_s, tok);
 			token_item->type = TK_SYMBOL;
@@ -190,6 +218,8 @@ int classify_token(char* tok, token* token_item)
 			return ERR_NO_ERROR;
 		}
 		else
+			
+			/* Invalid symbol */
 			return ERR_TK_SYMBOL_INV;
 	}
 	
@@ -213,7 +243,6 @@ void print_token_list(token* token_item){
 		printf("Token: type = %d, value = %d, value_s = %s\n",tk->type, tk->value, tk->value_s);
 		tk = tk->next;
 	}
-	
 	return;
 }
 	

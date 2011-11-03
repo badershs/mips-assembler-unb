@@ -1,25 +1,24 @@
-/* ---------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
 **  MIPS Assembler UnB - Lexical Analyzer
 **
 **  Description: 
 **
 **  Author:
 **  Project: MIPS Assembler UnB - October 2011
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 #ifndef LEXICAL_ANALYZER_H
 #define LEXICAL_ANALYZER_H
 
 #include "mips_assembler.h"
 
-/* ---------------------------------------------------------------------------
-**								DEFINES
-** -------------------------------------------------------------------------*/
+/* -----------------------------------------------------------------------------
+**									DEFINES
+** ---------------------------------------------------------------------------*/
 #define MAX_LINE_LEN 128
-#define MAX_REG_LEN 5
 
-/* ---------------------------------------------------------------------------
-**						  FUNCTION PROTOTYPES
-** -------------------------------------------------------------------------*/
+/* -----------------------------------------------------------------------------
+**							  FUNCTION PROTOTYPES
+** ---------------------------------------------------------------------------*/
 
 /* Function: lexical_analysis
 ** Description: Read the input 'file' and perform the lexical analysis. The
@@ -31,7 +30,7 @@
 ** is found, the function outputs a message error and terminates the process.
 ** In the case this behavior is not desire, this function should be called in
 ** an independent process.
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 int lexical_analysis(FILE* file, token_list** list);
 
 /* Function: classify_token
@@ -39,19 +38,19 @@ int lexical_analysis(FILE* file, token_list** list);
 ** a valid token and classify it in one of the following classes: register,
 ** label, instruction, immediate. The selected class as well as the token
 ** value are stored in the given 'token_item' structure.
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 int classify_token(char* tok, token* token_item);
 
 /* Function: print_line_list
 ** Description: For debug purposes. Print a token_list structure's content
 ** recursively in the terminal.
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 void print_line_list(token_list*);
 
 /* Function: print_token_list
 ** Description: For debug purposes. Print a token structure's content 
 ** recursively in the terminal.
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 void print_token_list(token*);
 
 #endif	/* LEXICAL_ANALYZER_H */

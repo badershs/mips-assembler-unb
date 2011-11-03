@@ -1,36 +1,50 @@
+/* -----------------------------------------------------------------------------
+**  MIPS Assembler UnB - Instructions Table
+**
+**  Description: MIPS' Instructions Table (limited, does not contain all MIPS
+**  instructions).
+**
+**  Author:
+**  Project: MIPS Assembler UnB - October 2011
+** ---------------------------------------------------------------------------*/
 #ifndef INSTRUCTIONS_TABLE_H
 #define INSTRUCTIONS_TABLE_H
 
 #include <stdint.h>
 
-#define INST_TABLE_SIZE		(12)
+/* -----------------------------------------------------------------------------
+**									DEFINES
+** ---------------------------------------------------------------------------*/
 
-/* INSTRUCTION TYPES */
-#define TYPE		(0x01)
+/* ------------------------------ Parameters  --------------------------------*/
+#define INST_TABLE_SIZE		(30)
+#define NB_STYPE			(14)
+
+/* --------------------------- Instruction Types -----------------------------*/
+/*#define TYPE		(0x01)*/
 #define TYPE_R		(0x01)
 #define TYPE_I		(0x02)
 #define TYPE_J		(0x03)
 
-/* INSTRUCTION SUBTYPES */
-#define STYPE		(0x02)
-#define NB_STYPE	(0x0E)
-#define STYPE_R1	(0x00) 	/* ArithLog: 	$d $s $t 	*/
-#define STYPE_R2	(0x01) 	/* DivMult: 	$s $t 		*/
-#define STYPE_R3	(0x02) 	/* JumpR: 	$s 		*/
-#define STYPE_R4	(0x03)	/* MoveFrom:	$d		*/
-#define STYPE_R5	(0x04)	/* Shift:	$d $t h5bits	*/
-#define STYPE_R6	(0x05)	/* ShiftV:	$d $t $s	*/
-#define STYPE_R7	(0x06)	/* System:	nothing		*/
-#define STYPE_I1	(0x07)	/* ArithLogI:	$t $s imm16bits	*/
-#define STYPE_I2	(0x08)	/* Branch:	$s $t Label	*/
-#define STYPE_I3	(0x09)	/* LoadStore:	$t imm16 ($s)	*/
-#define STYPE_I4	(0x0A)	/* BranchZ:	$s Label	*/
-#define STYPE_I5	(0x0B)	/* Lui:		$t imm16	*/
-#define STYPE_J1	(0x0C)	/* Jump:	Label		*/
-#define STYPE_J2	(0x0D)	/* Trap:	Imm26		*/
+/* -------------------------- Instruction SubTypes ---------------------------*/
+/*#define STYPE		(0x02) */
+#define STYPE_R1	(0x00) 		/* ArithLog: 	$d $s $t 	*/
+#define STYPE_R2	(0x01) 		/* DivMult: 	$s $t 		*/
+#define STYPE_R3	(0x02) 		/* JumpR: 	$s 		*/
+#define STYPE_R4	(0x03) 		/* MoveFrom:	$d		*/
+#define STYPE_R5	(0x04) 		/* Shift:	$d $t h5bits	*/
+#define STYPE_R6	(0x05) 		/* ShiftV:	$d $t $s	*/
+#define STYPE_R7	(0x06) 		/* System:	nothing		*/
+#define STYPE_I1	(0x07) 		/* ArithLogI:	$t $s imm16bits	*/
+#define STYPE_I2	(0x08) 		/* Branch:	$s $t Label	*/
+#define STYPE_I3	(0x09) 		/* LoadStore:	$t imm16 ($s)	*/
+#define STYPE_I4	(0x0A) 		/* BranchZ:	$s Label	*/
+#define STYPE_I5	(0x0B) 		/* Lui:		$t imm16	*/
+#define STYPE_J1	(0x0C) 		/* Jump:	Label		*/
+#define STYPE_J2	(0x0D) 		/* Trap:	Imm26		*/
 
-/* OPCODES */
-#define OP				(0x03)
+/* -------------------------------- Opcodes  ---------------------------------*/
+/*#define OP				(0x03)*/
 #define OP_R			(0x00)
 #define OP_NOOP			(0x00)
 #define OP_SLL			(0x00)
@@ -64,8 +78,8 @@
 #define OP_SW			(0x2b)
 
 
-/* FUNCTS */
-#define FN				(0x04)
+/* -------------------------------- Functs  ----------------------------------*/
+/*#define FN				(0x04)*/
 #define FN_NOOP			(0x00)	
 #define FN_SLL			(0x00)	
 #define FN_SRL			(0x02)	
@@ -97,13 +111,19 @@
 #define FN_SH			(0x00)	
 #define FN_SW			(0x00)	
 
+/* -----------------------------------------------------------------------------
+**									TYPEDEFS
+** ---------------------------------------------------------------------------*/
 
+/* Type: instruction
+** Description: 
+** ---------------------------------------------------------------------------*/
 typedef struct {
     char* name;
     uint8_t type;
     uint8_t subtype;
     uint8_t opcode;
     uint8_t funct;
-} instruction;
+} inst_info;
 
 #endif

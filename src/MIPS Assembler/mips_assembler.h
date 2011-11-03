@@ -1,4 +1,4 @@
-/* ---------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
 **  MIPS Assembler UnB - MIPS Assembler Declarations Header
 **
 **  Description: This file contains several definitions and declarations for 
@@ -6,7 +6,7 @@
 **
 **  Author:
 **  Project: MIPS Assembler UnB - October 2011
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 #ifndef MIPS_H
 #define MIPS_H
 
@@ -15,14 +15,14 @@
 #include "instructions_table.h"
 #include "register_table.h"
 
-/* ---------------------------------------------------------------------------
-**								DEFINES
-** -------------------------------------------------------------------------*/
+/* -----------------------------------------------------------------------------
+**									DEFINES
+** ---------------------------------------------------------------------------*/
 
-/* -------------------------- Parameters  --------------------------------- */
+/* ------------------------------ Parameters ---------------------------------*/
 #define MAX_SYMBOL_SIZE		(31)
 
-/* ------------------------------ Token types  ----------------------------- */
+/* ----------------------------- Token types ---------------------------------*/
 #define TK_NONE		(0x00)
 #define TK_LABEL	(0x01)	
 #define TK_SYMBOL	(0x02)
@@ -39,10 +39,10 @@
 #define TK_IMM_OPT	(0x07)
 #define TK_MASK		(0x0F)
 
-/* ------------------------------ Error codes  ----------------------------- */
+/* ------------------------------ Error codes --------------------------------*/
 #define ERR_NO_ERROR		(0x00)
 
-#define ERR_TK_INV		(0x01)
+#define ERR_TK_INV			(0x01)
 #define ERR_TK_REG_INV		(0x02)
 #define ERR_TK_IMM_INV		(0x03)
 #define ERR_TK_SYMBOL_INV	(0x04)
@@ -52,15 +52,15 @@
 #define ERR_MISS_BRACKET	(0x13)		/* Missing Brackets	     */
 #define ERR_EXTRA_BRACKET	(0x14)		/* Extra Brackets	     */
 #define ERR_MANY_ARG		(0x20)		/* Too many arguments	     */
-#define ERR_FEW_ARG		(0x21)		/* Too few arguments	     */
+#define ERR_FEW_ARG			(0x21)		/* Too few arguments	     */
 #define ERR_TYPE_ARG		(0x22)		/* Incorrect argument type   */
 #define ERR_MISS_INST		(0x23)		/* Missing instruction	     */
 #define ERR_INV_INST		(0x24)		/* Invalid instruction	     */
 #define ERR_MANY_LABELS		(0x25)		/* Too many labels	     */
 
-/* ---------------------------------------------------------------------------
-**								TYPEDEFS
-** -------------------------------------------------------------------------*/
+/* -----------------------------------------------------------------------------
+**								  TYPEDEFS
+** ---------------------------------------------------------------------------*/
 
 /* Type: token
 ** Description: Holds a token processed by the lexical analyzer from a mips 
@@ -68,7 +68,7 @@
 ** for the token value (int and string). The token type determines which value
 ** field is going to be used. It also has a pointer to a 'token' struct so that
 ** a linked list can be created.
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 typedef struct token_st {
     char* value_s;
     int32_t value;
@@ -81,7 +81,7 @@ typedef struct token_st {
 ** an index, a pointer to a 'token' struct and a pointer to the next node.
 ** OBS: Remmembering that 'token' structs can produce linked lists, this struct
 ** is more commonly used for generating a "list of lists of tokens".
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 typedef struct token_list_st {
     uint32_t index;
     token* first_token;
@@ -90,13 +90,12 @@ typedef struct token_list_st {
 
 /* Type: 
 ** Description: 
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 typedef struct {
     uint8_t op;
     uint8_t rs;
     uint8_t rt;
     uint8_t rd;
-    uint8_t shamt;
     uint8_t funct;
     int32_t imm;
     char *symbol;
@@ -104,7 +103,7 @@ typedef struct {
 
 /* Type: 
 ** Description: 
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 typedef struct inst_list_st {
     uint32_t index;
     uint8_t type;
@@ -112,13 +111,13 @@ typedef struct inst_list_st {
     struct inst_list_st *next;
 } inst_list;
 
-/* ---------------------------------------------------------------------------
-**						  FUNCTION PROTOTYPES
-** -------------------------------------------------------------------------*/
+/* -----------------------------------------------------------------------------
+**						 	  FUNCTION PROTOTYPES
+** ---------------------------------------------------------------------------*/
 
 /* Function: print_error_msg
 ** Description: Method for printing an error mesage to the user
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 void print_error_msg(uint32_t line, uint8_t error);
 
 #endif

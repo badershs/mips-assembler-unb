@@ -15,7 +15,7 @@
 #include "parser.h"
 #include "lexical_analyzer.h"
 
-extern const instruction inst_table[];
+extern const inst_info inst_table[];
 extern const uint8_t sintaxe[NB_STYPE][3];
 /*http://www.student.cs.uwaterloo.ca/~isg/res/mips/opcodes*/
 

@@ -1,11 +1,11 @@
-/* ---------------------------------------------------------------------------
-**  MIPS Assembler UnB - String Manipulator
+/* -----------------------------------------------------------------------------
+**  MIPS Assembler UnB - MIPS Assembler General Purpose Functions
 **
 **  Description: 
 **
 **  Author:
 **  Project: MIPS Assembler UnB - October 2011
-** -------------------------------------------------------------------------*/
+** ---------------------------------------------------------------------------*/
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -31,7 +31,7 @@
 ** In the case this behavior is not desire, this function should be called in
 ** an independent process.
 ** ---------------------------------------------------------------------------*/
-int lexical_analysis(FILE* file, token_list** list);
+int lexical_analysis(FILE* file, token_list** list, symbols_table** s_table);
 
 /* Function: classify_token
 ** Description: Works as a subfunction of lexical_analysis. Verify if 'tok' is
@@ -40,17 +40,5 @@ int lexical_analysis(FILE* file, token_list** list);
 ** value are stored in the given 'token_item' structure.
 ** ---------------------------------------------------------------------------*/
 int classify_token(char* tok, token* token_item);
-
-/* Function: print_line_list
-** Description: For debug purposes. Print a token_list structure's content
-** recursively in the terminal.
-** ---------------------------------------------------------------------------*/
-void print_line_list(token_list*);
-
-/* Function: print_token_list
-** Description: For debug purposes. Print a token structure's content 
-** recursively in the terminal.
-** ---------------------------------------------------------------------------*/
-void print_token_list(token*);
 
 #endif	/* LEXICAL_ANALYZER_H */

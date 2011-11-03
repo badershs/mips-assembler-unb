@@ -4,8 +4,8 @@ TABLES = instructions_table.o register_table.o
 
 all: main_lex
 
-main_lex: main_lex.o lexical_analyzer.o mips_assembler.o string_man.o parser.o $(TABLES)
-	$(CC) $(TABLES) -o main_lex main_lex.o lexical_analyzer.o mips_assembler.o string_man.o parser.o
+main_lex: main_lex.o lexical_analyzer.o mips_assembler.o string_man.o $(TABLES) #parser.o
+	$(CC) $(TABLES) -o main_lex main_lex.o lexical_analyzer.o mips_assembler.o string_man.o #parser.o
 
 main_lex.o: main_lex.c 
 	$(CC) $(CFLAGS) main_lex.c

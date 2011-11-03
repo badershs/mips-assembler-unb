@@ -17,33 +17,30 @@
 #include "parser.h"
 #include "mips_assembler.h"
 
-/* PARSING FUNCTION - It should take the token list and perform the syntactic analysis
-	In the case, there is no error it should generate a list of instructions and sotre
-	in inst_list */
-/*int parsing(token_list* tk_list, void** inst_list) {return 0;}*/
-
-/* CODE GENERATOR FUNCTION - It should take the list of instructions and write the binary data
-	to the output file*/
 int code_generator(inst_list* i_list, FILE* output_file) {return 0;}
 
 int main(){
 	token_list* tk_list;
-	inst_list* il_test;
+	/*inst_list* il_test;*/
+	symbols_table* s_table;
 	
-	FILE* input_file = fopen("TestCode.s","r");
+	FILE* input_file = fopen("Testbench.s","r");
 	if(input_file != NULL){
 		
-		lexical_analysis(input_file, &tk_list);
+		lexical_analysis(input_file, &tk_list, &s_table);
 		fclose(input_file);
 		
-		parsing(tk_list, &il_test);
+		print_line_list(tk_list);
+		print_symbols_table(s_table);
+		
+		/*parsing(tk_list, &il_test);
 		
 		FILE* output_file = fopen("TestCode.bin","rw");
 		if(output_file != NULL){
 			code_generator(il_test, output_file);
 		}
 		else
-			printf("Error opening output file\n");
+			printf("Error opening output file\n");*/
 	}
 	else
 		printf("Error opening input file\n");

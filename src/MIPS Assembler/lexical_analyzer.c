@@ -24,7 +24,7 @@ const char opr[] = ":()#";
 
 uint8_t flag_enclosed;
 
-int lexical_analysis(FILE* file, token_list** list)
+int lexical_analysis(FILE* file, token_list** list, symbols_table** s_table)
 {
 	/* Declare variables */
 	int res;
@@ -35,6 +35,7 @@ int lexical_analysis(FILE* file, token_list** list)
 	string_list* line_tokens;
 	token *first_token, *cur_token, *next_token;
 	token_list *cur_list, *next_list;
+	symbols_table *cur_symbol, *next_symbol;
 	
 	code_count = 1;
 	inst_count = 0;
@@ -42,6 +43,7 @@ int lexical_analysis(FILE* file, token_list** list)
 	
 	first_token = NULL;
 	*list = NULL;
+	*s_table = NULL;
 	
 	/* Read a whole line */
 	while ( fgets ( line, sizeof line, file ) != NULL ){
@@ -59,8 +61,24 @@ int lexical_analysis(FILE* file, token_list** list)
 				if(cur_token == NULL)
 					print_error_msg(code_count, ERR_MISP_COLON);
 				else{
-					if(cur_token->type == TK_SYMBOL)
+					if(cur_token->type == TK_SYMBOL){
+						next_symbol = *s_table;
+						while(next_symbol != NULL){
+							if(strcmp(next_symbol->symbol, cur_token->value_s) == 0)
+								print_error_msg(code_count, ERR_REP_LABEL);
+							next_symbol = next_symbol->next;
+						}
 						cur_token->type = TK_LABEL;
+						next_symbol = (symbols_table*)malloc(sizeof(symbols_table));
+						next_symbol->symbol = malloc(strlen(cur_token->value_s)+1);
+						strcpy(next_symbol->symbol, cur_token->value_s);
+						next_symbol->index = inst_count;
+						if(*s_table == NULL)
+							*s_table = next_symbol;
+						else
+							cur_symbol->next = next_symbol;
+						cur_symbol = next_symbol;
+					}
 					else
 						print_error_msg(code_count, ERR_MISP_COLON);
 				}
@@ -122,6 +140,7 @@ int lexical_analysis(FILE* file, token_list** list)
 		if(first_token != NULL){
 			next_list = (token_list*)malloc(sizeof(token_list));
 			next_list->index = inst_count;
+			next_list->code_line = code_count;
 			next_list->first_token = first_token;
 			
 			/* If the line has only one token inst_count is not updated since
@@ -142,9 +161,6 @@ int lexical_analysis(FILE* file, token_list** list)
 		}		
 		code_count++;
 	}
-	
-	print_line_list(*list);
-
 	return 0;
 }
 
@@ -224,25 +240,5 @@ int classify_token(char* tok, token* token_item)
 	}
 	
 	return ERR_NO_ERROR;
-}
-
-void print_line_list(token_list* list){
-	token_list* cur_list = list;
-	while(cur_list != NULL){
-		printf("LINE %d :\n",cur_list->index);
-		if(cur_list->first_token != NULL)
-			print_token_list(cur_list->first_token);
-		cur_list = cur_list->next;
-	}
-	return;
-}
-
-void print_token_list(token* token_item){
-	token* tk = token_item;
-	while(tk != NULL){
-		printf("Token: type = %d, value = %d, value_s = %s\n",tk->type, tk->value, tk->value_s);
-		tk = tk->next;
-	}
-	return;
 }
 	

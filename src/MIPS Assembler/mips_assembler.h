@@ -41,7 +41,6 @@
 
 /* ------------------------------ Error codes --------------------------------*/
 #define ERR_NO_ERROR		(0x00)
-
 #define ERR_TK_INV			(0x01)
 #define ERR_TK_REG_INV		(0x02)
 #define ERR_TK_IMM_INV		(0x03)
@@ -57,10 +56,23 @@
 #define ERR_MISS_INST		(0x23)		/* Missing instruction	     */
 #define ERR_INV_INST		(0x24)		/* Invalid instruction	     */
 #define ERR_MANY_LABELS		(0x25)		/* Too many labels	     */
+#define ERR_REP_LABEL		(0x30)		/* Redeclared label */
 
 /* -----------------------------------------------------------------------------
 **								  TYPEDEFS
 ** ---------------------------------------------------------------------------*/
+
+/* Type: symbols_table
+** Description: Holds an element of the symbols table. This table matches the
+** labels used in the program and the corresponding instruction index. It's
+** filled during the lexical analysis and used again in the semantic analysis 
+** to replace the symbols by their corresponding address.
+** ---------------------------------------------------------------------------*/
+typedef struct symbols_table_st {
+	char* symbol;
+	uint32_t index;
+	struct symbols_table_st * next;
+} symbols_table;
 
 /* Type: token
 ** Description: Holds a token processed by the lexical analyzer from a mips 
@@ -84,6 +96,7 @@ typedef struct token_st {
 ** ---------------------------------------------------------------------------*/
 typedef struct token_list_st {
     uint32_t index;
+	uint32_t code_line;
     token* first_token;
     struct token_list_st * next;
 } token_list;
@@ -119,5 +132,23 @@ typedef struct inst_list_st {
 ** Description: Method for printing an error mesage to the user
 ** ---------------------------------------------------------------------------*/
 void print_error_msg(uint32_t line, uint8_t error);
+
+/* Function: print_line_list
+** Description: For debug purposes. Print a token_list structure's content
+** recursively in the terminal.
+** ---------------------------------------------------------------------------*/
+void print_line_list(token_list*);
+
+/* Function: print_token_list
+** Description: For debug purposes. Print a token structure's content 
+** recursively in the terminal.
+** ---------------------------------------------------------------------------*/
+void print_token_list(token*);
+
+/* Function: print_symbols_table
+** Description: For debug purposes. Print a symbols_table structure's content 
+** recursively in the terminal.
+** ---------------------------------------------------------------------------*/
+void print_symbols_table(symbols_table*);
 
 #endif

@@ -139,3 +139,20 @@ int string_tokenizer_opr(string_list** plist, char* opr)
     
     return 0;
 }
+
+int get_string_prefix(char* file_name, char **prefix)
+{
+	char *pchr1, *pchr2;
+	
+	pchr2 = file_name - 1;
+	do{
+		pchr1 = pchr2 + 1;
+		pchr2 = strchr(pchr1, '.');
+	} while(pchr2 != NULL);
+	
+	if(pchr1 == file_name)
+		strcpy(*prefix, file_name);
+	else
+		strncpy(*prefix, file_name, (pchr1-file_name) - 1);
+	return 0;
+}

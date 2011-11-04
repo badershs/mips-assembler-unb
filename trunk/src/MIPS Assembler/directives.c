@@ -38,6 +38,7 @@ const char *help_menu[] = {
 int set_options(int argc, char *argv[])
 {
 	int i, j;
+	char* output_prefix;
 	string_list *cur_str, *next_str;
 	
 	gflag_analyze_only = 0;
@@ -118,9 +119,19 @@ int set_options(int argc, char *argv[])
 		return ERR_NO_FILE;
 	
 	if(g_output_file_name == NULL){
-		/* Get the input file name and replace the extension */
-		g_output_file_name = (char*)malloc(11);
-		strcpy(g_output_file_name, "output.bin");
+		output_prefix = (char*)malloc(strlen(g_input_file_name)+1);
+		get_string_prefix(g_input_file_name, &output_prefix);
+		
+		if(gflag_binary){
+			g_output_file_name = (char*)malloc(strlen(output_prefix)+5);
+			strcpy(g_output_file_name, output_prefix);
+			strcat(g_output_file_name, ".bin");
+		}
+		else{
+			g_output_file_name = (char*)malloc(strlen(output_prefix)+9);
+			strcpy(g_output_file_name, output_prefix);
+			strcat(g_output_file_name, ".bin.txt");
+		}
 	}
 	
 	return ERR_NO_ERROR;

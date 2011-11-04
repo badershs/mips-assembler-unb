@@ -47,6 +47,11 @@ string_list* string_tokenizer(char* str, char* delim, char* opr);
 ** character is found, the string holding it is split in three.
 ** ---------------------------------------------------------------------------*/
 int string_tokenizer_opr(string_list** plist, char* opr);
+
+/* Function: get_string_prefix
+** Description: 
+** ---------------------------------------------------------------------------*/
+int get_string_prefix(char* file_name, char **prefix);
     
 
 #endif	/* STRING_MAN_H */

@@ -12,13 +12,18 @@
 
 #include "mips_assembler.h"
 
+extern char* g_input_file_name;
+
 void print_error_msg(uint32_t line, uint8_t error) 
 {
+	printf("gmag: ");
+	
 	if(line > 0)
-		printf("Line %d:\t",line);
+		printf("%s.%d: ",g_input_file_name, line);
 	
 	switch(error){
 		case  ERR_TK_INV:
+			printf("Lexical error -> invalid token\n");
 		case  ERR_TK_REG_INV:
 		case  ERR_TK_IMM_INV:
 		case  ERR_TK_SYMBOL_INV:
@@ -34,16 +39,24 @@ void print_error_msg(uint32_t line, uint8_t error)
 		case  ERR_INV_INST:
 		case  ERR_MANY_LABELS:
 		case  ERR_REP_LABEL:
+			break;
 		case  ERR_INV_DIRECT:
 		case  ERR_HELP_MENU: 
 			break;
 		case  ERR_NO_OUT_NAME:
-		case  ERR_NO_DIR:
+			printf("'-o' directive should be followed by the output file name\n");
+			break;
+		case  ERR_NO_DIR:			
+			printf("'-B' directive should be followed by a directory\n");
+			break;
 		case  ERR_NO_FILE: 
 			printf("no input file\n");
 			break;
 		case  ERR_MANY_FILE:
-		default: printf("ERROR CODE = %d\n", error);
+			printf("too many input files\n");
+			break;
+		default: 
+			printf("ERROR CODE = %d\n", error);
 	}
 	
 	exit(1);

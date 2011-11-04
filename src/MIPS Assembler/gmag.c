@@ -28,10 +28,13 @@ int main(int argc, char *argv[]){
 	
 	if((res = set_options(argc, argv)) != ERR_NO_ERROR)
 		print_error_msg(0, res);
-	return 0;
 	
 	FILE* input_file = fopen("Testbench.s","r");
-	if(input_file != NULL){
+	if(input_file == NULL){
+		/* Try looking at the g_path variable */
+		printf("Error opening input file\n");
+	}
+	else {
 		
 		lexical_analysis(input_file, &tk_list, &s_table);
 		fclose(input_file);
@@ -48,8 +51,6 @@ int main(int argc, char *argv[]){
 		else
 			printf("Error opening output file\n");*/
 	}
-	else
-		printf("Error opening input file\n");
     
     return 0;
 }

@@ -2,14 +2,13 @@ CC = gcc
 CFLAGS = -ansi -c -Wall
 TABLES = instructions_table.o register_table.o
 
-all: main_lex
+all: gmag
 
-main_lex: main_lex.o lexical_analyzer.o mips_assembler.o string_man.o $(TABLES) #parser.o
-	$(CC) $(TABLES) -o main_lex main_lex.o lexical_analyzer.o mips_assembler.o string_man.o #parser.o
+gmag: $(TABLES) gmag.o lexical_analyzer.o mips_assembler.o string_man.o  parser.o directives.o
+	$(CC) $(TABLES) -o gmag gmag.o lexical_analyzer.o mips_assembler.o string_man.o parser.o directives.o
 
-main_lex.o: main_lex.c 
-	$(CC) $(CFLAGS) main_lex.c
-
+gmag.o: gmag.c 
+	$(CC) $(CFLAGS) gmag.c
 
 register_table.o: register_table.c 
 	$(CC) $(CFLAGS) register_table.c
@@ -28,8 +27,11 @@ lexical_analyzer.o: lexical_analyzer.c
 
 parser.o: parser.c 
 	$(CC) $(CFLAGS) parser.c
+	
+directives.o: directives.c
+	$(CC) $(CFLAGS) directives.c
 
 
 
 clean:
-	rm -rf main_lex *.o *~
+	rm -rf gmag *.o *~

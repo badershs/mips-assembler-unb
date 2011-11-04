@@ -40,23 +40,30 @@
 #define TK_MASK		(0x0F)
 
 /* ------------------------------ Error codes --------------------------------*/
-#define ERR_NO_ERROR		(0x00)
-#define ERR_TK_INV			(0x01)
-#define ERR_TK_REG_INV		(0x02)
-#define ERR_TK_IMM_INV		(0x03)
-#define ERR_TK_SYMBOL_INV	(0x04)
-#define ERR_MISA_BRACKET	(0x10)		/* Missaligned Brackets	     */
-#define ERR_MISP_BRACKET	(0x11)		/* Misplaced Brackets	     */
-#define ERR_MISP_COLON		(0x12)		/* Misplaced Colon	     */
-#define ERR_MISS_BRACKET	(0x13)		/* Missing Brackets	     */
-#define ERR_EXTRA_BRACKET	(0x14)		/* Extra Brackets	     */
-#define ERR_MANY_ARG		(0x20)		/* Too many arguments	     */
-#define ERR_FEW_ARG			(0x21)		/* Too few arguments	     */
-#define ERR_TYPE_ARG		(0x22)		/* Incorrect argument type   */
-#define ERR_MISS_INST		(0x23)		/* Missing instruction	     */
-#define ERR_INV_INST		(0x24)		/* Invalid instruction	     */
-#define ERR_MANY_LABELS		(0x25)		/* Too many labels	     */
-#define ERR_REP_LABEL		(0x30)		/* Redeclared label */
+#define ERR_NO_ERROR			(0x00)
+#define ERR_TK_INV				(0x01)
+#define ERR_TK_REG_INV			(0x02)
+#define ERR_TK_IMM_INV			(0x03)
+#define ERR_TK_SYMBOL_INV		(0x04)
+#define ERR_MISA_BRACKET		(0x10)		/* Missaligned Brackets	     */
+#define ERR_MISP_BRACKET		(0x11)		/* Misplaced Brackets	     */
+#define ERR_MISP_COLON			(0x12)		/* Misplaced Colon	     */
+#define ERR_MISS_BRACKET		(0x13)		/* Missing Brackets	     */
+#define ERR_EXTRA_BRACKET		(0x14)		/* Extra Brackets	     */
+#define ERR_MANY_ARG			(0x20)		/* Too many arguments	     */
+#define ERR_FEW_ARG				(0x21)		/* Too few arguments	     */
+#define ERR_TYPE_ARG			(0x22)		/* Incorrect argument type   */
+#define ERR_MISS_INST			(0x23)		/* Missing instruction	     */
+#define ERR_INV_INST			(0x24)		/* Invalid instruction	     */
+#define ERR_MANY_LABELS			(0x25)		/* Too many labels	     */
+#define ERR_REP_LABEL			(0x30)		/* Redeclared label */
+#define ERR_INV_DIRECT			(0x40)		/* Invalid directive */
+#define ERR_HELP_MENU			(0x41)		/* Display Help menu - stop program */
+#define ERR_NO_OUT_NAME			(0x42)		/* Absent output file name */
+#define ERR_NO_DIR				(0x43)		/* Absent directory */
+#define ERR_NO_FILE				(0x44)		/* Absent input file name */
+#define ERR_MANY_FILE			(0x45)		/* Too many input files */
+
 
 /* -----------------------------------------------------------------------------
 **								  TYPEDEFS

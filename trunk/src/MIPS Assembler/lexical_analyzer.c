@@ -62,13 +62,8 @@ int lexical_analysis(FILE* file, token_list** list, symbols_table** s_table)
 					print_error_msg(code_count, ERR_MISP_COLON);
 				else{
 					if(cur_token->type == TK_SYMBOL){
-						next_symbol = *s_table;
-						while(next_symbol != NULL){
-							if(strcmp(next_symbol->symbol, cur_token->value_s) == 0)
-								print_error_msg(code_count, ERR_REP_LABEL);
-							next_symbol = next_symbol->next;
-						}
 						cur_token->type = TK_LABEL;
+						
 						next_symbol = (symbols_table*)malloc(sizeof(symbols_table));
 						next_symbol->symbol = malloc(strlen(cur_token->value_s)+1);
 						strcpy(next_symbol->symbol, cur_token->value_s);

@@ -126,4 +126,4 @@ typedef struct {
     uint8_t funct;
 } inst_info;
 
-#endif
+#endif	/* INSTRUCTIONS_TABLE_H */

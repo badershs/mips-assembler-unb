@@ -117,14 +117,14 @@ void printinst(inst_list *il)
   printf("\nIndex: %3d",il->index);
   printf("\nType: %3d",il->type);
   printf("\nValues:\top = %3d\n\trs = %3d\n\trt = %3d\n\trd = %3d\n\tshamt = %3d\n\tfunct = %3d\n\timm = %d",
-	 il->values.op,il->values.rs,il->values.rt,il->values.rd,il->values.shamt,il->values.funct,il->values.imm);
+	 il->values.op,il->values.rs,il->values.rt,il->values.rd,il->values.imm,il->values.funct,il->values.imm);
   return;
 }
 
 void initialize(inst_list *il)
 {
   il->next=NULL;
-  il->values.op=il->values.rs=il->values.rt=il->values.rd=il->values.shamt=il->values.funct=0;
+  il->values.op=il->values.rs=il->values.rt=il->values.rd=il->values.funct=0;
   il->values.imm=0;
   return;
 }
@@ -137,8 +137,8 @@ void includeininst(uint8_t arg_type, int32_t value,inst_list** il)
       case(TK_REG_ENC): (*il)->values.rs=(uint8_t)value; 		break;
       case(TK_REG_T):	(*il)->values.rt=(uint8_t)value; 		break;
       case(TK_IMM_16):
-      case(TK_IMM_26):	(*il)->values.imm=value; 			break;
-      case(TK_IMM_5):	(*il)->values.shamt=(uint8_t)value;		break;
+      case(TK_IMM_26):	
+      case(TK_IMM_5):	(*il)->values.imm=(int32_t)value;		break;
   }
   return;
 }

@@ -1,6 +1,14 @@
+/* -----------------------------------------------------------------------------
+**  MIPS Assembler UnB - Instructions Table
+**
+**  Description: 
+**
+**  Author:
+**  Project: MIPS Assembler UnB - October 2011
+** ---------------------------------------------------------------------------*/
+
 #include "instructions_table.h"
 #include "mips_assembler.h"
-#include <stdint.h>
 
 const inst_info inst_table[] = { 
 	{"noop",		TYPE_R,		STYPE_R7,	OP_R,			FN_NOOP},

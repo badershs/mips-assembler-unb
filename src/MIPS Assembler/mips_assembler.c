@@ -14,8 +14,36 @@
 
 void print_error_msg(uint32_t line, uint8_t error) 
 {
+	if(line > 0)
+		printf("Line %d:\t",line);
+	
 	switch(error){
-		default: printf("Line %d: ERROR: error code = %d\n",line, error);
+		case  ERR_TK_INV:
+		case  ERR_TK_REG_INV:
+		case  ERR_TK_IMM_INV:
+		case  ERR_TK_SYMBOL_INV:
+		case  ERR_MISA_BRACKET:
+		case  ERR_MISP_BRACKET:
+		case  ERR_MISP_COLON:
+		case  ERR_MISS_BRACKET:
+		case  ERR_EXTRA_BRACKET:
+		case  ERR_MANY_ARG:
+		case  ERR_FEW_ARG:
+		case  ERR_TYPE_ARG:
+		case  ERR_MISS_INST:
+		case  ERR_INV_INST:
+		case  ERR_MANY_LABELS:
+		case  ERR_REP_LABEL:
+		case  ERR_INV_DIRECT:
+		case  ERR_HELP_MENU: 
+			break;
+		case  ERR_NO_OUT_NAME:
+		case  ERR_NO_DIR:
+		case  ERR_NO_FILE: 
+			printf("no input file\n");
+			break;
+		case  ERR_MANY_FILE:
+		default: printf("ERROR CODE = %d\n", error);
 	}
 	
 	exit(1);

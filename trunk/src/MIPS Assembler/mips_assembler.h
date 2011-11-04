@@ -37,6 +37,7 @@
 #define TK_IMM_16	(0x26)
 #define TK_IMM_26	(0x36)
 #define TK_IMM_OPT	(0x07)
+#define TK_COMMA	(0x08)
 #define TK_MASK		(0x0F)
 
 /* ------------------------------ Error codes --------------------------------*/

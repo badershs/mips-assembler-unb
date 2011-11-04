@@ -19,8 +19,8 @@
 extern const register_name reg_table[];
 extern const inst_info inst_table[];
 
-const char delim[] = " ,\n\t";
-const char opr[] = ":()#";
+const char delim[] = " \n\t";
+const char opr[] = ",:()#";
 
 uint8_t flag_enclosed;
 
@@ -165,8 +165,13 @@ int classify_token(char* tok, token* token_item)
 	int32_t imm_value;
 	char* endptr;
 	
+	/* Case TK_COMMA */
+	if(*tok == ','){
+		token_item->type = TK_COMMA;
+	}
+	
 	/* Cases TK_REG and TK_REG_ENC */
-	if(*tok == '$'){
+	else if(*tok == '$'){
 		for(i = 0; i < REG_TABLE_SIZE; i++){
 			if(strcmp(tok, reg_table[i].name1) == 0 || strcmp(tok, reg_table[i].name2) == 0){
 				token_item->value = i;

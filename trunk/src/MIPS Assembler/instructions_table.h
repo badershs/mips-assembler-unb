@@ -28,18 +28,18 @@
 
 /* -------------------------- Instruction SubTypes ---------------------------*/
 /*#define STYPE		(0x02) */
-#define STYPE_R1	(0x00) 		/* ArithLog: 	$d $s $t 	*/
-#define STYPE_R2	(0x01) 		/* DivMult: 	$s $t 		*/
+#define STYPE_R1	(0x00) 		/* ArithLog: 	$d , $s , $t 	*/
+#define STYPE_R2	(0x01) 		/* DivMult: 	$s , $t 		*/
 #define STYPE_R3	(0x02) 		/* JumpR: 	$s 		*/
 #define STYPE_R4	(0x03) 		/* MoveFrom:	$d		*/
-#define STYPE_R5	(0x04) 		/* Shift:	$d $t h5bits	*/
-#define STYPE_R6	(0x05) 		/* ShiftV:	$d $t $s	*/
+#define STYPE_R5	(0x04) 		/* Shift:	$d , $t , h5bits	*/
+#define STYPE_R6	(0x05) 		/* ShiftV:	$d , $t , $s	*/
 #define STYPE_R7	(0x06) 		/* System:	nothing		*/
-#define STYPE_I1	(0x07) 		/* ArithLogI:	$t $s imm16bits	*/
-#define STYPE_I2	(0x08) 		/* Branch:	$s $t Label	*/
-#define STYPE_I3	(0x09) 		/* LoadStore:	$t imm16 ($s)	*/
-#define STYPE_I4	(0x0A) 		/* BranchZ:	$s Label	*/
-#define STYPE_I5	(0x0B) 		/* Lui:		$t imm16	*/
+#define STYPE_I1	(0x07) 		/* ArithLogI:	$t , $s , imm16bits	*/
+#define STYPE_I2	(0x08) 		/* Branch:	$s , $t , Label	*/
+#define STYPE_I3	(0x09) 		/* LoadStore:	$t , imm16 ($s)	*/
+#define STYPE_I4	(0x0A) 		/* BranchZ:	$s , Label	*/
+#define STYPE_I5	(0x0B) 		/* Lui:		$t , imm16	*/
 #define STYPE_J1	(0x0C) 		/* Jump:	Label		*/
 #define STYPE_J2	(0x0D) 		/* Trap:	Imm26		*/
 

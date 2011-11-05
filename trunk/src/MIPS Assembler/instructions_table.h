@@ -19,6 +19,7 @@
 /* ------------------------------ Parameters  --------------------------------*/
 #define INST_TABLE_SIZE		(30)
 #define NB_STYPE			(14)
+#define VERSION				("1.0")
 
 /* --------------------------- Instruction Types -----------------------------*/
 /*#define TYPE		(0x01)*/

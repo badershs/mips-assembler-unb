@@ -113,7 +113,8 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
       else{ f=0; }
   }
 
-  il_out=&first_instr;
+
+	*il_out=first_instr;
 
   return ERR_NO_ERROR;
 }

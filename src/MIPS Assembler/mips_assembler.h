@@ -65,6 +65,8 @@
 #define ERR_NO_FILE				(0x44)		/* Absent input file name */
 #define ERR_MANY_FILE			(0x45)		/* Too many input files */
 
+#define ERR_INV_IMM		(0x30)		/* Invalid size of immediate */
+#define ERR_NO_LABEL		(0x31)		/* Label called nonexistent  */
 
 /* -----------------------------------------------------------------------------
 **								  TYPEDEFS

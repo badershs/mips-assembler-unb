@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
 	if((res = set_options(argc, argv)) != ERR_NO_ERROR)
 		print_error_msg(0, res);
 	
-	FILE* input_file = fopen("Testbench.s","r");
+	FILE* input_file = fopen("TestCode.s","r");
 	if(input_file == NULL){
 		/* Try looking at the g_path variable */
 		printf("Error opening input file\n");

@@ -21,6 +21,7 @@
 
 /* ------------------------------ Parameters ---------------------------------*/
 #define MAX_SYMBOL_SIZE		(31)
+#define LANGUAGE_PT_BR		1
 
 /* ----------------------------- Token types ---------------------------------*/
 #define TK_NONE		(0x00)
@@ -60,10 +61,12 @@
 #define ERR_REP_LABEL			(0x30)		/* Redeclared label */
 #define ERR_INV_DIRECT			(0x40)		/* Invalid directive */
 #define ERR_HELP_MENU			(0x41)		/* Display Help menu - stop program */
-#define ERR_NO_OUT_NAME			(0x42)		/* Absent output file name */
-#define ERR_NO_DIR				(0x43)		/* Absent directory */
-#define ERR_NO_FILE				(0x44)		/* Absent input file name */
-#define ERR_MANY_FILE			(0x45)		/* Too many input files */
+#define ERR_VERSION				(0x42)		/* Display assembler's version */
+#define ERR_ABOUT				(0x43)		/* Display assembler's version */
+#define ERR_NO_OUT_NAME			(0x44)		/* Absent output file name */
+#define ERR_NO_DIR				(0x45)		/* Absent directory */
+#define ERR_NO_FILE				(0x46)		/* Absent input file name */
+#define ERR_MANY_FILE			(0x47)		/* Too many input files */
 
 #define ERR_INV_IMM		(0x30)		/* Invalid size of immediate */
 #define ERR_NO_LABEL		(0x31)		/* Label called nonexistent  */

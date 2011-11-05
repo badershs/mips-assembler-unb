@@ -39,6 +39,8 @@ const inst_info inst_table[] = {
 	{"lui",			TYPE_I,		STYPE_I4,	OP_LUI,			FN_LUI},
 	{"lb",			TYPE_I,		STYPE_I2,	OP_LB,			FN_LB},
 	{"lh",			TYPE_I,		STYPE_I2,	OP_LH,			FN_LH},
+	{"lbu",			TYPE_I,		STYPE_I2,	OP_LBU,			FN_LBU},
+	{"lhu",			TYPE_I,		STYPE_I2,	OP_LHU,			FN_LHU},	
 	{"sb",			TYPE_I,		STYPE_I2,	OP_SB,			FN_SB},
 	{"sh",			TYPE_I,		STYPE_I2,	OP_SH,			FN_SH},
 };

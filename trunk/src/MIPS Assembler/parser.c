@@ -16,7 +16,7 @@
 #include "lexical_analyzer.h"
 
 extern const inst_info inst_table[];
-extern const uint8_t sintaxe[NB_STYPE][3];
+extern const uint8_t sintaxe[NB_STYPE][5];
 /*http://www.student.cs.uwaterloo.ca/~isg/res/mips/opcodes*/
 
 
@@ -26,7 +26,7 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
   token *tok;
   inst_list* first_instr, *cur_instr;
 
-  int i,f=1;
+  int i,f=1, instruction; /* The flag Instruction tells whether the current line of tokens contains an instruction*/
   uint8_t code_inst, code_sint;
 
   /* Inicialization of the lists of tokens and instructions */
@@ -41,6 +41,7 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
       /* Beginnng of the analysis: LABEL and missing instruction*/
       cur_instr->index=cur_tk_list->index;
       tok=cur_tk_list->first_token;
+      instruction=1;
       if( tok->type==TK_LABEL )
       {
 	  if( tok->next!=NULL )
@@ -51,15 +52,18 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
 	  } 
 	  else 
 	  { 
-	      tok->next=(token*)malloc(sizeof(token));
+	      instruction=0;
+	      /*tok->next=(token*)malloc(sizeof(token));
 	      tok=tok->next;
 	      tok->type=TK_INST;
 	      tok->value=0;
-	      tok->next=NULL;
+	      tok->next=NULL;*/
 	  }
       }
       printf("\nPASS the label test");
-
+    
+    if(instruction)
+    {
       /* Now the token must be a valid instruction. Beginning of the constructions of instruction struct, with the use of the instruction table*/
       if( tok->type==TK_SYMBOL ) { return ERR_INV_INST; }
       else if( tok->type!=TK_INST ) { return ERR_MISS_INST; }
@@ -77,7 +81,7 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
       }
 
       /* Treatment of the attributes: REG, REG_ENC, IMM, SYMBOL; using the sintaxe table */
-      for( i=0; i<3 ; i++ )
+      for( i=0; i<5 ; i++ )
       {
 	  if( (sintaxe[code_sint][i]==TK_NONE)&&(tok->next!=NULL) ) { return ERR_MANY_ARG; }
 	  if( (sintaxe[code_sint][i]!=TK_NONE)&&(tok->next==NULL) ) { return ERR_FEW_ARG; }
@@ -89,20 +93,22 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
 	      else if( ((sintaxe[code_sint][i] & TK_MASK)==TK_REG_ENC) && tok->type==TK_REG ) { return ERR_MISS_BRACKET; }
 	      else { return ERR_TYPE_ARG; }
 	  }
-	  if( tok->type!=TK_SYMBOL ) { includeininst(sintaxe[code_sint][i],tok->value,&cur_instr); }
-	  else { cur_instr->values.symbol=tok->value_s;/*includesymbol(tok->value_s,) PARA INSERIR O VALOR DEVIDO AO SIMBOLO*/ }  
+	  if( (tok->type!=TK_SYMBOL)&&(tok->type!=TK_COMMA) ) { includeininst(sintaxe[code_sint][i],tok->value,&cur_instr); }
+	  else if( tok->type==TK_SYMBOL ) { cur_instr->values.symbol=tok->value_s;/*includesymbol(tok->value_s,) PARA INSERIR O VALOR DEVIDO AO SIMBOLO*/ }  
       }
  
       /* Preparation for the next line */
       printinst(cur_instr);
+     }
       if( cur_tk_list->next !=NULL )
       {
 	  cur_tk_list=cur_tk_list->next;
-	  cur_instr->next=(inst_list*)malloc(sizeof(inst_list));
-	  cur_instr=cur_instr->next;
-	  initialize(cur_instr);
-
-	 
+	  if( instruction )
+	  {
+	      cur_instr->next=(inst_list*)malloc(sizeof(inst_list));
+	      cur_instr=cur_instr->next;
+	      initialize(cur_instr);
+	  }
       }
       else{ f=0; }
   }

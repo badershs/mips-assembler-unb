@@ -18,7 +18,67 @@
 #include "parser.h"
 #include "mips_assembler.h"
 
-int code_generator(inst_list* i_list, FILE* output_file) {return 0;}
+
+void binario (int32_t dec, char** bin){
+	int i;
+	*bin=calloc(33,sizeof(char)); 
+	for(i=0;i<32;i++){
+		if ((dec & 0x80000000) == 0x80000000)
+			(*bin)[i]='1';
+		else
+			(*bin)[i]='0';
+		dec<<=1;
+	}
+	(*bin)[32]='\0';
+}
+
+/*TODO*/
+int code_generator(inst_list* i_list, FILE* output_file) {
+	char* bin;
+	inst_list* p;
+	p=i_list;
+
+	while(p!=NULL)
+	{
+
+		switch(p->type){
+			case 1:
+				binario((p->values).op, &bin);
+				fprintf(output_file,"%s",&(bin[26]));
+				binario((p->values).rs, &bin);
+				fprintf(output_file,"%s",&(bin[27]));
+				binario((p->values).rt, &bin);
+				fprintf(output_file,"%s",&(bin[27]));
+				binario((p->values).rd, &bin);
+				fprintf(output_file,"%s",&(bin[27]));
+				binario((p->values).imm, &bin);
+				fprintf(output_file,"%s",&(bin[27]));
+				binario((p->values).funct, &bin);
+				fprintf(output_file,"%s",&(bin[26]));
+			break;
+			case 2:
+				binario((p->values).op, &bin);
+				fprintf(output_file,"%s",&(bin[26]));
+				binario((p->values).rs, &bin);
+				fprintf(output_file,"%s",&(bin[27]));
+				binario((p->values).rt, &bin);
+				fprintf(output_file,"%s",&(bin[27]));
+				binario((p->values).imm, &bin);
+				fprintf(output_file,"%s",&(bin[16]));
+			break;
+			case 3:
+				binario((p->values).op, &bin);
+				fprintf(output_file,"%s",&(bin[26]));
+				binario((p->values).imm, &bin);
+				fprintf(output_file,"%s",&(bin[6]));
+			break;
+		}
+		fprintf(output_file,"\n");
+		p=p->next;
+	}
+	return 0;
+}
+
 
 int main(int argc, char *argv[]){
 	int res;
@@ -42,14 +102,16 @@ int main(int argc, char *argv[]){
 		print_line_list(tk_list);
 		print_symbols_table(s_table);
 		
-		parsing(tk_list, &il_test);
+		printf("%d\n",parsing(tk_list, &il_test));
 		
-		/*FILE* output_file = fopen("TestCode.bin","rw");
+		
+		FILE* output_file = fopen("TestCode.txt","w");
 		if(output_file != NULL){
 			code_generator(il_test, output_file);
 		}
 		else
-			printf("Error opening output file\n");*/
+			printf("Error opening output file\n");
+		fclose(output_file);
 	}
     
     return 0;

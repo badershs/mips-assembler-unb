@@ -40,6 +40,7 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
       printf("\nLine %3d (index)",cur_tk_list->index);
       /* Beginnng of the analysis: LABEL and missing instruction*/
       cur_instr->index=cur_tk_list->index;
+      cur_instr->code_line=cur_tk_list->code_line;
       tok=cur_tk_list->first_token;
       instruction=1;
       if( tok->type==TK_LABEL )
@@ -74,6 +75,7 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
       if( cur_instr->type==TYPE_R )
 	  cur_instr->values.funct=inst_table[code_inst].funct;
       code_sint=inst_table[code_inst].subtype;
+      cur_instr->stype=code_sint;
 
       if( code_sint==STYPE_I4 )
       {
@@ -91,6 +93,8 @@ int parsing(token_list* tk_list,inst_list** il_out) /* input, output ; returns e
 	  { 
 	      if( ((sintaxe[code_sint][i] & TK_MASK)==TK_REG) && tok->type==TK_REG_ENC ) { return ERR_EXTRA_BRACKET; }
 	      else if( ((sintaxe[code_sint][i] & TK_MASK)==TK_REG_ENC) && tok->type==TK_REG ) { return ERR_MISS_BRACKET; }
+	      else if( (sintaxe[code_sint][i]==TK_COMMA) && (tok->type!=TK_COMMA) ) { return ERR_MISS_COMMA; }
+	      else if( (sintaxe[code_sint][i]!=TK_COMMA) && (tok->type==TK_COMMA) ) { return ERR_MANY_COMMA; }
 	      else { return ERR_TYPE_ARG; }
 	  }
 	  if( (tok->type!=TK_SYMBOL)&&(tok->type!=TK_COMMA) ) { includeininst(sintaxe[code_sint][i],tok->value,&cur_instr); }

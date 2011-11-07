@@ -17,6 +17,7 @@
 #include "lexical_analyzer.h"
 #include "parser.h"
 #include "mips_assembler.h"
+#include "semantic_analyzer.h"
 
 
 void binario (int32_t dec, char** bin){
@@ -103,7 +104,7 @@ int main(int argc, char *argv[]){
 		print_symbols_table(s_table);
 		
 		printf("%d\n",parsing(tk_list, &il_test));
-		
+		printf("%d\n",semantic_analysis(il_test,s_table));
 		
 		FILE* output_file = fopen("TestCode.txt","w");
 		if(output_file != NULL){

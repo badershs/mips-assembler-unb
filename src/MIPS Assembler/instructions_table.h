@@ -67,9 +67,10 @@
 #define OP_ADDI			(0x08)
 #define OP_ADDIU		(0x09)	
 #define OP_SLTI			(0x0A)
+#define OP_SLTIU		(0x0B)
 #define OP_ANDI			(0x0C)
 #define OP_ORI			(0x0D)
-#define OP_SLTIU		(0x0B)	
+#define OP_XORI			(0x0E)
 #define OP_LUI			(0x0F)
 #define OP_LB			(0x20)
 #define OP_LH			(0x21)
@@ -79,6 +80,7 @@
 #define OP_SB			(0x28)
 #define OP_SH			(0x29)
 #define OP_SW			(0x2b)
+
 
 
 /* -------------------------------- Functs  ----------------------------------*/
@@ -110,11 +112,12 @@
 #define FN_LB			(0x00)	
 #define FN_LH			(0x00)	
 #define FN_LW			(0x00)
-#define OP_LBU			(0x00)
+#define FN_LBU			(0x00)
 #define FN_LHU			(0x00)
 #define FN_SB			(0x00)	
 #define FN_SH			(0x00)	
 #define FN_SW			(0x00)	
+#define FN_XORI			(0x00)
 
 /* -----------------------------------------------------------------------------
 **									TYPEDEFS

@@ -15,52 +15,20 @@
 #include "string_man.h"
 #include "mips_assembler.h"
 
-#define SIZE_HELP_MENU	13
-
-uint8_t gflag_analyze_only;
-uint8_t gflag_warnings;
-uint8_t gflag_binary;
-char* g_input_file_name;
-char* g_output_file_name;
-string_list* g_path;
-
-#ifdef LANGUAGE_PT_BR
-const char *help_menu[] = {
-	"Uso: gmag [opcoes] arquivo...",
-	"Montador MIPS GMAG - GNU GPL v3",
-	"",
-	"Opcoes:",
-	"  -o <arquivo>		Salva a saida em <arquivo>",
-	"  -B <diretorio>	Adiciona o <diretorio> ao caminho de busca do montador",
-	"  -b			Gera o arquivo de saida em formato binario",
-	"  -t			Gera o arquivo de saida em formato texto binario",
-	"  -A			Executa apenas a analise; nao faz a montagem",	
-	"  -Wall			Exibir mensagens de aviso",
-	"  --help		Exibir este menu e encerrar execucao",
-	"  --version		Exibir versao do montador",
-	"  --about		Exibir informacoes autorais"
-};
-#else
-const char *help_menu[] = {
-	"Usage: gmag [options] file...",
-	"GMAG MIPS Assembler - GNU GPL v3",
-	"",
-	"Options:",
-	"  -o <file>		Place the output into <file>",
-	"  -B <directory>	Add <directory> to the assembler's search path",
-	"  -b			Generate output file in binary format",
-	"  -t			Generate output file in binary text format",
-	"  -A			Analyze only; do not assemble",	
-	"  -Wall			Show warning messages",
-	"  --help		Display this help and exit",
-	"  --version		Display the version of the assembler",
-	"  --about		Display authory information"
-};
-#endif
+/* -----------------------------------------------------------------------------
+**								GLOBAL VARIABLES
+** ---------------------------------------------------------------------------*/
+uint8_t gflag_analyze_only; 		/* Analyze only, do not mount */
+uint8_t gflag_warnings;				/* Display warning messages */
+uint8_t gflag_binary;				/* Generate output in binary format */
+					/* when not set, output is generated in binary text */
+char* g_input_file_name;			/* Input file name */
+char* g_output_file_name;			/* Output file name */
+string_list* g_path;	 			/* Where to search for the input file*/
 
 int set_options(int argc, char *argv[])
 {
-	int i, j;
+	int i;
 	char* output_prefix;
 	string_list *cur_str, *next_str;
 	
@@ -123,9 +91,6 @@ int set_options(int argc, char *argv[])
 				return ERR_ABOUT;
 			}
 			else if(strcmp(argv[i], "--help") == 0){
-				for(j = 0; j < SIZE_HELP_MENU; j++)
-					printf("%s\n",help_menu[j]);
-				printf("\n");
 				return ERR_HELP_MENU;
 			}
 			else{

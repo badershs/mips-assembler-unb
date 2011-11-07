@@ -12,11 +12,31 @@
 
 #include "mips_assembler.h"
 
+#define SIZE_HELP_MENU	13
+
 extern char* g_input_file_name;
 
 #ifdef LANGUAGE_PT_BR
+const char *help_menu[] = {
+	"Sintaxe: gmag [opcoes] arquivo...",
+	"Montador MIPS GMAG - GNU GPL v3",
+	"",
+	"Opcoes:",
+	"  -o <arquivo>		Seleciona <arquivo> como o arquivo de saida",
+	"  -B <diretorio>	Adiciona o <diretorio> ao caminho de busca do montador",
+	"  -b			Gera o arquivo de saida em formato binario",
+	"  -t			Gera o arquivo de saida em formato texto binario",
+	"  -A			Executa apenas a analise; nao faz a montagem",	
+	"  -Wall			Exibir mensagens de aviso",
+	"  --help		Exibir este menu e encerrar execucao",
+	"  --version		Exibir versao do montador",
+	"  --about		Exibir informacoes autorais"
+};
+
 void print_error_msg(uint32_t line, uint8_t error) 
 {
+	int i;
+	
 	if(line > 0)
 		printf("gmag: %s.%d: ",g_input_file_name, line);
 	
@@ -59,6 +79,8 @@ void print_error_msg(uint32_t line, uint8_t error)
 			printf("      Para informacoes sobre diretivas, digite './gmag --help'\n");
 			break;
 		case  ERR_HELP_MENU: 
+			for(i = 0; i < SIZE_HELP_MENU; i++)
+				printf("%s\n",help_menu[i]);
 			break;
 		case ERR_VERSION:
 			printf("%s\n",VERSION);
@@ -79,13 +101,36 @@ void print_error_msg(uint32_t line, uint8_t error)
 		case  ERR_MANY_FILE:
 			printf("gmag: arquivos de entrada demais\n");
 			break;
+		case  ERR_INV_FILE:
+			printf("gmag: nao foi possivel abrir o arquivo de entrada\n");
+			break;
+		case  ERR_ANALYZE_DONE:
+			printf("gmag: nenhum erro encontrado no codigo fonte\n");
+			break;
 		default: 
 			printf("ERROR CODE = %d\n", error);
 	}
 	
 	exit(1);
 }
+
 #else
+const char *help_menu[] = {
+	"Usage: gmag [options] file...",
+	"GMAG MIPS Assembler - GNU GPL v3",
+	"",
+	"Options:",
+	"  -o <file>		Place the output into <file>",
+	"  -B <directory>	Add <directory> to the assembler's search path",
+	"  -b			Generate output file in binary format",
+	"  -t			Generate output file in binary text format",
+	"  -A			Analyze only; do not assemble",	
+	"  -Wall			Show warning messages",
+	"  --help		Display this help and exit",
+	"  --version		Display the version of the assembler",
+	"  --about		Display authory information"
+};
+
 void print_error_msg(uint32_t line, uint8_t error) 
 {
 	if(line > 0)
@@ -182,4 +227,13 @@ void print_symbols_table(symbols_table* table){
 		table = table->next;
 	}
 	return;
+}
+
+void print_inst(inst_list *il)
+{
+	printf("\nIndex: %3d",il->index);
+	printf("\nType: %3d",il->type);
+	printf("\nValues:\top = %3d\n\trs = %3d\n\trt = %3d\n\trd = %3d\n\tshamt = %3d\n\tfunct = %3d\n\timm = %d",
+			il->values.op,il->values.rs,il->values.rt,il->values.rd,il->values.imm,il->values.funct,il->values.imm);
+			return;
 }

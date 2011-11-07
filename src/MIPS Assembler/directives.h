@@ -10,6 +10,13 @@
 #ifndef DIRECTIVES_H
 #define DIRECTIVES_H
 
+/* -----------------------------------------------------------------------------
+**						 	  FUNCTION PROTOTYPES
+** ---------------------------------------------------------------------------*/
+
+/* Function: set_options
+** Description: 
+** ---------------------------------------------------------------------------*/
 int set_options(int argc, char *argv[]);
 
 #endif	/* DIRECTIVES_H */

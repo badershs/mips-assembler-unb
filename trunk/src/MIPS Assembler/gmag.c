@@ -12,108 +12,77 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "string_man.h"
+#include "mips_assembler.h"
 #include "directives.h"
 #include "lexical_analyzer.h"
 #include "parser.h"
-#include "mips_assembler.h"
 #include "semantic_analyzer.h"
+#include "code_generator.h"
+#include "string_man.h"
 
-
-void binario (int32_t dec, char** bin){
-	int i;
-	*bin=calloc(33,sizeof(char)); 
-	for(i=0;i<32;i++){
-		if ((dec & 0x80000000) == 0x80000000)
-			(*bin)[i]='1';
-		else
-			(*bin)[i]='0';
-		dec<<=1;
-	}
-	(*bin)[32]='\0';
-}
-
-/*TODO*/
-int code_generator(inst_list* i_list, FILE* output_file) {
-	char* bin;
-	inst_list* p;
-	p=i_list;
-
-	while(p!=NULL)
-	{
-
-		switch(p->type){
-			case 1:
-				binario((p->values).op, &bin);
-				fprintf(output_file,"%s",&(bin[26]));
-				binario((p->values).rs, &bin);
-				fprintf(output_file,"%s",&(bin[27]));
-				binario((p->values).rt, &bin);
-				fprintf(output_file,"%s",&(bin[27]));
-				binario((p->values).rd, &bin);
-				fprintf(output_file,"%s",&(bin[27]));
-				binario((p->values).imm, &bin);
-				fprintf(output_file,"%s",&(bin[27]));
-				binario((p->values).funct, &bin);
-				fprintf(output_file,"%s",&(bin[26]));
-			break;
-			case 2:
-				binario((p->values).op, &bin);
-				fprintf(output_file,"%s",&(bin[26]));
-				binario((p->values).rs, &bin);
-				fprintf(output_file,"%s",&(bin[27]));
-				binario((p->values).rt, &bin);
-				fprintf(output_file,"%s",&(bin[27]));
-				binario((p->values).imm, &bin);
-				fprintf(output_file,"%s",&(bin[16]));
-			break;
-			case 3:
-				binario((p->values).op, &bin);
-				fprintf(output_file,"%s",&(bin[26]));
-				binario((p->values).imm, &bin);
-				fprintf(output_file,"%s",&(bin[6]));
-			break;
-		}
-		fprintf(output_file,"\n");
-		p=p->next;
-	}
-	return 0;
-}
-
+/* -----------------------------------------------------------------------------
+**								GLOBAL VARIABLES
+** ---------------------------------------------------------------------------*/
+extern uint8_t gflag_analyze_only; 		/* Analyze only, do not mount */
+extern uint8_t gflag_warnings;			/* Display warning messages */
+extern uint8_t gflag_binary;			/* Generate output in binary format */
+						/* when not set, output is generated in binary text */
+extern char* g_input_file_name;			/* Input file name */
+extern char* g_output_file_name;		/* Output file name */
+extern string_list* g_path;	 			/* Where to search for the input file*/
 
 int main(int argc, char *argv[]){
 	int res;
+	char input_file_name[128];
 	token_list* tk_list;
-	inst_list* il_test;
+	inst_list* il_list;
 	symbols_table* s_table;
+	FILE *input_file, *output_file;
 	
+	/* Analyze main's arguments and set global flags */ 
 	if((res = set_options(argc, argv)) != ERR_NO_ERROR)
 		print_error_msg(0, res);
 	
-	FILE* input_file = fopen("TestCode.s","r");
-	if(input_file == NULL){
-		/* Try looking at the g_path variable */
-		printf("Error opening input file\n");
+	/* Open input file */
+	strcpy(input_file_name, g_input_file_name);
+	input_file = fopen(input_file_name,"r");
+	while(input_file == NULL){
+		if(g_path == NULL)
+			print_error_msg(0, ERR_INV_FILE);
+		
+		strcpy(input_file_name, g_path->string);
+		strcat(input_file_name, "/");
+		strcat(input_file_name, g_input_file_name);
+		input_file = fopen(input_file_name,"r");
+		
+		g_path = g_path->next;
 	}
-	else {
+	
+	/* Lexical Analysis */ 
+	lexical_analysis(input_file, &tk_list, &s_table);
+	fclose(input_file);
+
+	/* Parsing */
+	parsing(tk_list, &il_list);
 		
-		lexical_analysis(input_file, &tk_list, &s_table);
-		fclose(input_file);
+	/* Semantic Analysis*/
+	semantic_analysis(il_list, s_table);
+	
+	if(!gflag_analyze_only){
 		
-		print_line_list(tk_list);
-		print_symbols_table(s_table);
-		
-		printf("%d\n",parsing(tk_list, &il_test));
-		printf("%d\n",semantic_analysis(il_test,s_table));
-		
-		FILE* output_file = fopen("TestCode.txt","w");
+		/* Open output file */	
+		output_file = fopen(g_output_file_name,"w");
 		if(output_file != NULL){
-			code_generator(il_test, output_file);
+			
+			/* Generate output file */
+			code_generator(il_list, output_file);
+			fclose(output_file);
 		}
 		else
-			printf("Error opening output file\n");
-		fclose(output_file);
+			print_error_msg(0, ERR_INV_OUT_FILE);
 	}
-    
+	else
+		print_error_msg(0, ERR_ANALYZE_DONE);
+	
     return 0;
 }

@@ -47,32 +47,34 @@
 #define ERR_TK_REG_INV			(0x02)
 #define ERR_TK_IMM_INV			(0x03)
 #define ERR_TK_SYMBOL_INV		(0x04)
-#define ERR_MISA_BRACKET		(0x10)		/* Missaligned Brackets	     */
-#define ERR_MISP_BRACKET		(0x11)		/* Misplaced Brackets	     */
-#define ERR_MISP_COLON			(0x12)		/* Misplaced Colon	     */
-#define ERR_MISS_BRACKET		(0x13)		/* Missing Brackets	     */
-#define ERR_EXTRA_BRACKET		(0x14)		/* Extra Brackets	     */
-#define ERR_MANY_ARG			(0x20)		/* Too many arguments	     */
-#define ERR_FEW_ARG			(0x21)		/* Too few arguments	     */
-#define ERR_TYPE_ARG			(0x22)		/* Incorrect argument type   */
-#define ERR_MISS_INST			(0x23)		/* Missing instruction	     */
-#define ERR_INV_INST			(0x24)		/* Invalid instruction	     */
-#define ERR_MANY_LABELS			(0x25)		/* Too many labels	     */
-#define ERR_REP_LABEL			(0x26)		/* Redeclared label */
-#define ERR_MISS_COMMA			(0x27)		/* Missing expected comma    */
-#define ERR_MANY_COMMA			(0x28)		/* Comma used in wrong way   */
-#define ERR_INV_DIRECT			(0x40)		/* Invalid directive */
-#define ERR_HELP_MENU			(0x41)		/* Display Help menu - stop program */
-#define ERR_VERSION			(0x42)		/* Display assembler's version */
-#define ERR_ABOUT			(0x43)		/* Display assembler's version */
-#define ERR_NO_OUT_NAME			(0x44)		/* Absent output file name */
-#define ERR_NO_DIR			(0x45)		/* Absent directory */
-#define ERR_NO_FILE			(0x46)		/* Absent input file name */
-#define ERR_MANY_FILE			(0x47)		/* Too many input files */
-
-#define ERR_INV_IMM			(0x30)		/* Invalid size of immediate */
-#define ERR_NO_LABEL			(0x31)		/* Label called nonexistent  */
-#define ERR_ZERO_REG			(0x32)		/* Register ZERO can't be modified*/
+#define ERR_MISA_BRACKET		(0x10)		/* Missaligned Brackets	  	      */
+#define ERR_MISP_BRACKET		(0x11)		/* Misplaced Brackets	   		  */
+#define ERR_MISP_COLON			(0x12)		/* Misplaced Colon	    		  */
+#define ERR_MISS_BRACKET		(0x13)		/* Missing Brackets	   			  */
+#define ERR_EXTRA_BRACKET		(0x14)		/* Extra Brackets	   			  */
+#define ERR_MANY_ARG			(0x20)		/* Too many arguments	 	      */
+#define ERR_FEW_ARG				(0x21)		/* Too few arguments	 	      */
+#define ERR_TYPE_ARG			(0x22)		/* Incorrect argument type 		  */
+#define ERR_MISS_INST			(0x23)		/* Missing instruction	    	  */
+#define ERR_INV_INST			(0x24)		/* Invalid instruction	    	  */
+#define ERR_MANY_LABELS			(0x25)		/* Too many labels	   			  */
+#define ERR_REP_LABEL			(0x26)		/* Redeclared label 			  */
+#define ERR_MISS_COMMA			(0x27)		/* Missing expected comma   	  */
+#define ERR_MANY_COMMA			(0x28)		/* Comma used in wrong way  	  */
+#define ERR_INV_IMM				(0x30)		/* Invalid size of immediate 	  */
+#define ERR_NO_LABEL			(0x31)		/* Label called nonexistent 	  */
+#define ERR_ZERO_REG			(0x32)		/* Register ZERO set as target 	  */
+#define ERR_INV_DIRECT			(0x40)		/* Invalid directive 			  */
+#define ERR_HELP_MENU			(0x41)		/* Display Help menu 			  */
+#define ERR_VERSION				(0x42)		/* Display assembler's version	  */
+#define ERR_ABOUT				(0x43)		/* Display assembler's version 	  */
+#define ERR_NO_OUT_NAME			(0x44)		/* Absent output file name 		  */
+#define ERR_NO_DIR				(0x45)		/* Absent directory 			  */
+#define ERR_NO_FILE				(0x46)		/* Absent input file name		  */
+#define ERR_MANY_FILE			(0x47)		/* Too many input files			  */
+#define ERR_INV_FILE			(0x48)		/* Couldn't find the input file	  */
+#define ERR_INV_OUT_FILE		(0x49)		/* Couldn't open the output file  */
+#define ERR_ANALYZE_DONE		(0x4A)		/* Analysis has finished		  */
 
 /* -----------------------------------------------------------------------------
 **								  TYPEDEFS
@@ -169,5 +171,10 @@ void print_token_list(token*);
 ** recursively in the terminal.
 ** ---------------------------------------------------------------------------*/
 void print_symbols_table(symbols_table*);
+
+/* Function:
+** Description:
+** ---------------------------------------------------------------------------*/
+void print_inst(inst_list*);
 
 #endif

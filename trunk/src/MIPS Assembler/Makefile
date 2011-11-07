@@ -4,8 +4,8 @@ TABLES = instructions_table.o register_table.o
 
 all: gmag
 
-gmag: $(TABLES) gmag.o lexical_analyzer.o mips_assembler.o string_man.o  parser.o directives.o
-	$(CC) $(TABLES) -o gmag gmag.o lexical_analyzer.o mips_assembler.o string_man.o parser.o directives.o
+gmag: $(TABLES) gmag.o lexical_analyzer.o mips_assembler.o string_man.o  parser.o directives.o semantic_analyzer.o
+	$(CC) $(TABLES) -o gmag gmag.o lexical_analyzer.o mips_assembler.o string_man.o parser.o directives.o semantic_analyzer.o
 
 gmag.o: gmag.c 
 	$(CC) $(CFLAGS) gmag.c
@@ -30,6 +30,9 @@ parser.o: parser.c
 	
 directives.o: directives.c
 	$(CC) $(CFLAGS) directives.c
+
+semantic_analyzer.o: semantic_analyzer.c
+	$(CC) $(CFLAGS) semantic_analyzer.c
 
 
 

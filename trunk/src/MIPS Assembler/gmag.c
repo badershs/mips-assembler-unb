@@ -61,9 +61,11 @@ int main(int argc, char *argv[]){
 	/* Lexical Analysis */ 
 	lexical_analysis(input_file, &tk_list, &s_table);
 	fclose(input_file);
+	/*print_line_list(tk_list);*/
 
 	/* Parsing */
 	parsing(tk_list, &il_list);
+	/*print_inst(il_list);*/
 		
 	/* Semantic Analysis*/
 	semantic_analysis(il_list, s_table);

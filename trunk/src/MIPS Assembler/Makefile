@@ -36,6 +36,13 @@ code_generator.o: code_generator.c
 
 string_man.o: string_man.c 
 	$(CC) $(CFLAGS) string_man.c
+	
+comparer: comparer.o
+	$(CC) -o comparer comparer.o
+	
+comparer.o: comparer.c 
+	$(CC) $(CFLAGS) comparer.c
+
 
 clean:
 	rm -rf gmag *.o *~

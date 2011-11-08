@@ -36,7 +36,6 @@ int parsing(token_list* tk_list, inst_list** il_out) /* input, output ; returns 
 	f = 1;
 	while(f)
 	{
-		/*printf("\nLine %3d (index)",cur_tk_list->index);*/
 		/* Beginnng of the analysis: LABEL and missing instruction*/
 		cur_instr->index=cur_tk_list->index;
 		cur_instr->code_line=cur_tk_list->code_line;
@@ -51,16 +50,8 @@ int parsing(token_list* tk_list, inst_list** il_out) /* input, output ; returns 
 				return ERR_MANY_LABELS;
 			} 
 			else 
-			{ 
 				instruction=0;
-				/*tok->next=(token*)malloc(sizeof(token));
-				tok=tok->next;
-				tok->type=TK_INST;
-				tok->value=0;
-				tok->next=NULL;*/
-			}
 		}
-		/*printf("\nPASS the label test");*/
     
 		if(instruction)
 		{
@@ -68,7 +59,6 @@ int parsing(token_list* tk_list, inst_list** il_out) /* input, output ; returns 
 			if( tok->type==TK_SYMBOL ) { return ERR_INV_INST; }
 			else if( tok->type!=TK_INST ) { return ERR_MISS_INST; }
 			else { code_inst=tok->value; }
-			/*printf("\nPASS the instruction test");*/
 			
 			cur_instr->type=inst_table[code_inst].type;
 			cur_instr->values.op=inst_table[code_inst].opcode;
@@ -76,11 +66,6 @@ int parsing(token_list* tk_list, inst_list** il_out) /* input, output ; returns 
 				cur_instr->values.funct=inst_table[code_inst].funct;
 			code_sint=inst_table[code_inst].subtype;
 			cur_instr->stype=code_sint;
-
-			if( code_sint==STYPE_I4 )
-			{
-			/* DEFINIR AS CONSTANTES EM RT PARA AS INSTRUÇÕES DE SUBTIPO I4 (BRANCHZ) */
-			}
 
 			/* Treatment of the attributes: REG, REG_ENC, IMM, SYMBOL; using the sintaxe table */
 			for( i=0; i<5 ; i++ )
@@ -102,9 +87,6 @@ int parsing(token_list* tk_list, inst_list** il_out) /* input, output ; returns 
 				if( (tok->type!=TK_SYMBOL)&&(tok->type!=TK_COMMA) ) { includeininst(sintaxe[code_sint][i],tok->value,&cur_instr); }
 				else if( tok->type==TK_SYMBOL ) { cur_instr->values.symbol=tok->value_s;/*includesymbol(tok->value_s,) PARA INSERIR O VALOR DEVIDO AO SIMBOLO*/ }  
 			}
- 
-			/* Preparation for the next line */
-			/*print_inst(cur_instr);*/
 		}
 		if( cur_tk_list->next !=NULL )
 		{

@@ -33,7 +33,11 @@ uint32_t semantic_analysis(inst_list*,symbols_table*);
 /* Function:
 ** Description:
 ** -------------------------------------------------------------------------*/
-int32_t labelvalue(char*, symbols_table*);
+uint32_t labelvalue(char*, symbols_table*);
 
+/* Function:
+** Description:
+** -------------------------------------------------------------------------*/
+int verify_symbols_table(symbols_table*);
 
 #endif

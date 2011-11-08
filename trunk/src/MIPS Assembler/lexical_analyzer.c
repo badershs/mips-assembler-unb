@@ -37,8 +37,10 @@ int lexical_analysis(FILE* file, token_list** list, symbols_table** s_table)
 	token_list *cur_list, *next_list;
 	symbols_table *cur_symbol, *next_symbol;
 	
+	/* Initialize variables */
 	code_count = 1;
-	inst_count = 0;
+	inst_count = FIRST_INST_ADD;
+	
 	flag_enclosed = 0;
 	
 	first_token = NULL;
@@ -68,6 +70,7 @@ int lexical_analysis(FILE* file, token_list** list, symbols_table** s_table)
 						next_symbol->symbol = malloc(strlen(cur_token->value_s)+1);
 						strcpy(next_symbol->symbol, cur_token->value_s);
 						next_symbol->index = inst_count;
+						next_symbol->code_line = code_count;
 						if(*s_table == NULL)
 							*s_table = next_symbol;
 						else

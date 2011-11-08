@@ -46,21 +46,8 @@
 
 /* -------------------------------- Opcodes  ---------------------------------*/
 /*#define OP				(0x03)*/
-#define OP_R			(0x00)
 #define OP_NOOP			(0x00)
-#define OP_SLL			(0x00)
-#define OP_SRL			(0x00)
-#define OP_JR			(0x00)
-#define OP_ADD			(0x00)
-#define OP_SUB			(0x00)
-#define OP_AND			(0x00)
-#define OP_OR			(0x00)
-#define OP_ADDU			(0x00)
-#define OP_SUBU			(0x00)
-#define OP_NOR			(0x00)
-#define OP_SLT			(0x00)
-#define OP_SLTU			(0x00)
-#define OP_J			(0x02)
+#define OP_R			(0x00)
 #define OP_BEQ			(0x04)
 #define OP_BNE			(0x05)
 #define OP_JAL			(0x07)
@@ -80,12 +67,13 @@
 #define OP_SB			(0x28)
 #define OP_SH			(0x29)
 #define OP_SW			(0x2b)
-
-
+#define OP_J			(0x02)
 
 /* -------------------------------- Functs  ----------------------------------*/
 /*#define FN				(0x04)*/
 #define FN_NOOP			(0x00)	
+#define FN_I			(0x00)	
+#define FN_J			(0x00)	
 #define FN_SLL			(0x00)	
 #define FN_SRL			(0x02)	
 #define FN_JR			(0x08)	
@@ -98,26 +86,10 @@
 #define FN_NOR			(0x27)	
 #define FN_SLT			(0x2A)	
 #define FN_SLTU			(0x2B)	
-#define FN_J			(0x00)	
-#define FN_BEQ			(0x00)	
-#define FN_BNE			(0x00)	
-#define FN_JAL			(0x00)	
-#define FN_ADDI			(0x00)	
-#define FN_ADDIU		(0x00)		
-#define FN_SLTI			(0x00)	
-#define FN_ANDI			(0x00)	
-#define FN_ORI			(0x00)	
-#define FN_SLTIU		(0x00)		
-#define FN_LUI			(0x00)	
-#define FN_LB			(0x00)	
-#define FN_LH			(0x00)	
-#define FN_LW			(0x00)
-#define FN_LBU			(0x00)
-#define FN_LHU			(0x00)
-#define FN_SB			(0x00)	
-#define FN_SH			(0x00)	
-#define FN_SW			(0x00)	
-#define FN_XORI			(0x00)
+#define FN_MULT			(0x18)	
+#define FN_DIV			(0x1A)	
+#define FN_MFHI			(0x10)	
+#define FN_MFLO			(0x12)	
 
 /* -----------------------------------------------------------------------------
 **									TYPEDEFS

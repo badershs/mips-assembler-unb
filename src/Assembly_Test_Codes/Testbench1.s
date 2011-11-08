@@ -1,3 +1,7 @@
+		mult	$t1, $t2
+		div	$t1, $t2
+		mfhi	$t3
+		mflo	$t3
 		addi	$t0, $zero, 0x34
 		addi	$t1, $zero, 0x1200
 		add 	$t2, $t0, $t1	

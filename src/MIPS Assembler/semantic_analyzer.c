@@ -15,81 +15,123 @@
 #include "mips_assembler.h"
 #include "semantic_analyzer.h"
 
-#define ERR_COUNT_0	(-0x10000)
-#define ERR_COUNT_2	(-0x20000)
+/* -----------------------------------------------------------------------------
+**									DEFINES
+** ---------------------------------------------------------------------------*/
 
-uint32_t semantic_analysis(inst_list *first_inst,symbols_table *sym_list)
+/* ------------------------------ Parameters ---------------------------------*/
+#define INV_LABEL_VALUE	(-1)
+
+#define MIN_IMMU_5		(0)
+#define MAX_IMMU_5		(31)
+
+#define MIN_IMMU_16		(0)
+#define MAX_IMMU_16		(65535)
+
+#define MIN_IMM_16		(-32768)
+#define MAX_IMM_16		(32767)
+
+#define MIN_IMMU_26		(0)
+#define MAX_IMMU_26		(67108863)
+
+
+uint32_t semantic_analysis(inst_list *first_inst, symbols_table *sym_list)
 {
-	inst_list *cur_inst=first_inst;
-	int32_t index_label;
-
-	int f=1;
-
-	/*printf("\nSemantic Analysis:\n");*/
-
-	while(f)
+	uint8_t op, stype;
+	uint32_t index_label;
+	inst_list *cur_inst;
+	
+	/* Search for duplicated labels */
+	verify_symbols_table(sym_list);
+	
+	cur_inst=first_inst;
+	while(cur_inst != NULL)
 	{
-		/* Verification whether the register ZERO is tried to be modified */
-		if( ( ((cur_inst->stype==STYPE_R1)||(cur_inst->stype==STYPE_R5)||(cur_inst->stype==STYPE_R6))&&(cur_inst->values.rd==0) ) ||
-		( ((cur_inst->stype==STYPE_I1)||(cur_inst->stype==STYPE_I5)||(cur_inst->values.op==OP_LW)||(cur_inst->values.op==OP_LB)||
-			(cur_inst->values.op==OP_LH)||(cur_inst->values.op==OP_LBU)||(cur_inst->values.op==OP_LHU))&&
-			(cur_inst->values.rt==0) )) { return ERR_ZERO_REG;}
-      
-		/* Verification of the immediate size */
-		if( ((cur_inst->stype==STYPE_R5) && ((cur_inst->values.imm<0)||(cur_inst->values.imm>31))) ||
-		(((cur_inst->values.op==OP_ADDI)||(cur_inst->values.op==OP_ANDI)||(cur_inst->values.op==OP_ORI)||(cur_inst->values.op==OP_SLTI)||(cur_inst->values.op==OP_XORI)||(cur_inst->stype==STYPE_I3)) && ((cur_inst->values.imm<-32768)||(cur_inst->values.imm>32767))) ||
-		(((cur_inst->values.op==OP_ADDIU)||(cur_inst->values.op==OP_SLTIU)) && ((cur_inst->values.imm<-0)||(cur_inst->values.imm>65535))) ||
-		((cur_inst->stype==STYPE_J2)&&((cur_inst->values.imm<0)||(cur_inst->values.imm>67108863))) ) { return ERR_INV_IMM;}
-
-		/* Verification of the validation of the label*/
-		/* The code block bellow has been replaced by another one, because this
-		version of the assembler does not allow memmory relocation */
+		/* State variables */
+		op = cur_inst->values.op;
+		stype = cur_inst->stype;
+		
+		/* Search and replace the label's matching address */
+		/* Jump instructions */
 		if( cur_inst->stype==STYPE_J1 ) 
 		{
-			cur_inst->values.imm_rel=labelvalue(cur_inst->values.symbol, sym_list);
-			if( cur_inst->values.imm_rel==ERR_COUNT_0 ) { return ERR_NO_LABEL;}
-			else if( cur_inst->values.imm_rel==ERR_COUNT_2 ) { return ERR_MANY_LABELS; }
+			index_label = labelvalue(cur_inst->values.symbol, sym_list);
+			if(index_label == INV_LABEL_VALUE)
+				print_error_msg(cur_inst->code_line, ERR_NO_LABEL);
+			else
+				cur_inst->values.imm=index_label*0.25;
 		}
-		/*if( cur_inst->stype==STYPE_J1 ) 
-		{
-			cur_inst->values.imm=labelvalue(cur_inst->values.symbol, sym_list);
-			if( cur_inst->values.imm==ERR_COUNT_0 ) { return ERR_NO_LABEL;}
-			else if( cur_inst->values.imm==ERR_COUNT_2 ) { return ERR_MANY_LABELS; }
-		}*/
 		
+		/* Branch instructions */
 		if( (cur_inst->stype==STYPE_I2)||(cur_inst->stype==STYPE_I4) )
 		{
 			index_label=labelvalue(cur_inst->values.symbol, sym_list);
-			cur_inst->values.imm=(index_label-(cur_inst->index+4))*0.25;
-			if( index_label==ERR_COUNT_0 ) { return ERR_NO_LABEL;}
-			else if( index_label==ERR_COUNT_2 ) { return ERR_MANY_LABELS; }
+			if(index_label == INV_LABEL_VALUE)
+				print_error_msg(cur_inst->code_line, ERR_NO_LABEL);
+			else
+				cur_inst->values.imm=(index_label-(cur_inst->index+4))*0.25;
+		}
+		
+		/* Verification whether the register ZERO is tried to be modified */
+		if((stype=STYPE_R1)||(stype==STYPE_R5)||(stype==STYPE_R6)){
+			if(cur_inst->values.rd==0)
+				print_error_msg(cur_inst->code_line, ERR_ZERO_REG);
+		}
+		if((stype==STYPE_I1)||(stype==STYPE_I5)||(op==OP_LW)||(op==OP_LB)|| (op==OP_LH)||(op==OP_LBU)||(op==OP_LHU)){
+			if(cur_inst->values.rt==0)
+				print_error_msg(cur_inst->code_line, ERR_ZERO_REG);
+		}
+      
+		/* Verification if the immediate is not out of bounds */		
+		if(cur_inst->stype==STYPE_R5){
+			if((cur_inst->values.imm < MIN_IMMU_5)||(cur_inst->values.imm> MAX_IMMU_5))
+				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
+		}
+		if((op == OP_ADDI) || (op == OP_ANDI) || (op == OP_ORI) || (op == OP_SLTI) || (op == OP_XORI) || (cur_inst->stype==STYPE_I3)){
+			if((cur_inst->values.imm < MIN_IMM_16)||(cur_inst->values.imm> MAX_IMM_16))
+				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
+		}
+		if((op == OP_ADDIU) || (op == OP_SLTIU)){
+			if((cur_inst->values.imm < MIN_IMMU_16)||(cur_inst->values.imm> MAX_IMMU_16))
+				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
+		}
+		if(cur_inst->stype==STYPE_J2){
+			if((cur_inst->values.imm < MIN_IMMU_26)||(cur_inst->values.imm> MAX_IMMU_26))
+				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
 		}
 
-		/* Next instruction */
-		if( cur_inst->next!=NULL )
+		/* Take the next instruction */
 		cur_inst=cur_inst->next;
-		else f=0;
 	}
 	return ERR_NO_ERROR;
 }
 
-int32_t labelvalue(char* label, symbols_table *sym_list) /*returns -0x10000 if the label was not declared and -0x20000 if the label is multi declared*/
+uint32_t labelvalue(char* label, symbols_table *sym_list)
 {
-	symbols_table *cur_sym=sym_list;
-	int count=0, f=1;
-	int32_t index;
-
-	while(f)
+	while(sym_list != NULL)
 	{
-		if( strcmp(cur_sym->symbol,label)==0 )
-		{
-			count++;
-			index=cur_sym->index;
-		}
-		if( cur_sym->next!=NULL ) { cur_sym=cur_sym->next; }
-		else { f=0;}
+		if(strcmp(sym_list->symbol,label) == 0)
+			return sym_list->index;
+		sym_list = sym_list->next;		
 	}
-	if( count==0 ) { return ERR_COUNT_0; }
-	else if( count>1 ) {return ERR_COUNT_2; }
-	return index;
+	return INV_LABEL_VALUE;
+}
+
+int verify_symbols_table(symbols_table* table)
+{
+	symbols_table *first, *second;
+	
+	first = table;
+	while(first != NULL){
+		second = first->next;
+		while(second != NULL){
+			if(strcmp(first->symbol, second->symbol) == 0){
+				print_error_msg(first->code_line, ERR_DUP_LABEL);
+			}
+			second = second->next;
+		}
+		first = first->next;
+	}
+	
+	return ERR_NO_ERROR;
 }

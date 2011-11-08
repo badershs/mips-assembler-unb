@@ -38,7 +38,7 @@ int code_generator(inst_list* i_list, FILE* output_file) {
 				inst += (p->values).op 		<< 26;
 				inst += (p->values).rs 		<< 21;
 				inst += (p->values).rt 		<< 16;
-				inst += (p->values).imm 	<< 0;
+				inst += (uint16_t)(p->values).imm 	<< 0;
 				break;
 			case TYPE_J:
 				inst += (p->values).op 		<< 26;

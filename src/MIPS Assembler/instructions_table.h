@@ -17,7 +17,7 @@
 ** ---------------------------------------------------------------------------*/
 
 /* ------------------------------ Parameters  --------------------------------*/
-#define INST_TABLE_SIZE		(30)
+#define INST_TABLE_SIZE		(37)
 #define NB_STYPE			(14)
 #define VERSION				("1.0")
 
@@ -50,7 +50,7 @@
 #define OP_R			(0x00)
 #define OP_BEQ			(0x04)
 #define OP_BNE			(0x05)
-#define OP_JAL			(0x07)
+#define OP_JAL			(0x03)
 #define OP_ADDI			(0x08)
 #define OP_ADDIU		(0x09)	
 #define OP_SLTI			(0x0A)

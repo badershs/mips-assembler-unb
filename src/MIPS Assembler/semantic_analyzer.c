@@ -22,7 +22,11 @@
 /* ------------------------------ Parameters ---------------------------------*/
 #define INV_LABEL_VALUE	(-1)
 
-#define MIN_IMMU_5		(0)
+#define MAX_IMM_5		(31)
+#define MAX_IMM_16		(65535)
+#define MAX_IMM_26		(67108863)
+
+/*#define MIN_IMMU_5		(0)
 #define MAX_IMMU_5		(31)
 
 #define MIN_IMMU_16		(0)
@@ -32,7 +36,7 @@
 #define MAX_IMM_16		(32767)
 
 #define MIN_IMMU_26		(0)
-#define MAX_IMMU_26		(67108863)
+#define MAX_IMMU_26		(67108863)*/
 
 
 uint32_t semantic_analysis(inst_list *first_inst, symbols_table *sym_list)
@@ -83,7 +87,28 @@ uint32_t semantic_analysis(inst_list *first_inst, symbols_table *sym_list)
 		}
       
 		/* Verification if the immediate is not out of bounds */		
+		if(((op == OP_ADDIU) || (op == OP_SLTIU)) && cur_inst->values.imm < 0){
+			print_error_msg(cur_inst->code_line, ERR_NEG_UNS);
+		}
+		
 		if(cur_inst->stype==STYPE_R5){
+			if(cur_inst->values.imm> MAX_IMM_5)
+				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
+		}
+		if((op == OP_ADDI) || (op == OP_ANDI) || (op == OP_ORI) || (op == OP_SLTI) || (op == OP_XORI) || (op == OP_ADDIU) || (op == OP_SLTIU) || (cur_inst->stype==STYPE_I3)){
+			/*if(cur_inst->values.imm >> 16 != 0){
+				if(cur_inst->values.imm >> 15 != 0x1FFFF)
+					print_error_msg(cur_inst->code_line, ERR_INV_IMM);
+			}*/
+			if(((int16_t)cur_inst->values.imm != cur_inst->values.imm) && ((uint16_t)cur_inst->values.imm != cur_inst->values.imm))
+				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
+		}
+		if(cur_inst->stype==STYPE_J2){
+			if(cur_inst->values.imm> MAX_IMM_26)
+				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
+		}
+			
+		/*if(cur_inst->stype==STYPE_R5){
 			if((cur_inst->values.imm < MIN_IMMU_5)||(cur_inst->values.imm> MAX_IMMU_5))
 				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
 		}
@@ -98,7 +123,7 @@ uint32_t semantic_analysis(inst_list *first_inst, symbols_table *sym_list)
 		if(cur_inst->stype==STYPE_J2){
 			if((cur_inst->values.imm < MIN_IMMU_26)||(cur_inst->values.imm> MAX_IMMU_26))
 				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
-		}
+		}*/
 
 		/* Take the next instruction */
 		cur_inst=cur_inst->next;

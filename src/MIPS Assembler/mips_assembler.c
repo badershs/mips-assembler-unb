@@ -43,34 +43,49 @@ void print_error_msg(uint32_t line, uint8_t error)
 	switch(error){
 		case  ERR_TK_INV:
 			printf("Erro lexico -> token invalido\n");
+			break;
 		case  ERR_TK_REG_INV:
 			printf("Erro lexico -> registrador invalido\n");
+			break;
 		case  ERR_TK_IMM_INV:
 			printf("Erro lexico -> imediato invalido\n");
+			break;
 		case  ERR_TK_SYMBOL_INV:
 			printf("Erro lexico -> símbolo invalido\n");
+			break;
 		case  ERR_MISA_BRACKET:
 			printf("Erro sintatico -> parenteses desalinhados\n");
+			break;
 		case  ERR_MISP_BRACKET:
 			printf("Erro sintatico -> parenteses sobrando\n");
+			break;
 		case  ERR_MISP_COLON:
 			printf("Erro lexico -> caractere ':' fora de rótulo\n");
+			break;
 		case  ERR_MISS_BRACKET:
 			printf("Erro sintatico -> parenteses faltano\n");
+			break;
 		case  ERR_EXTRA_BRACKET:
 			printf("Erro sintatico -> parenteses sobrando\n");
+			break;
 		case  ERR_MANY_ARG:
 			printf("Erro sintatico -> argumentos sobrando\n");
+			break;
 		case  ERR_FEW_ARG:
 			printf("Erro sintatico -> argumentos faltando\n");
+			break;
 		case  ERR_TYPE_ARG:
 			printf("Erro sintatico -> argumento de tipo incorreto\n");
+			break;
 		case  ERR_MISS_INST:
 			printf("Erro sintatico -> instrucao faltando\n");
+			break;
 		case  ERR_INV_INST:
 			printf("Erro sintatico -> instrucao invalida\n");
+			break;
 		case  ERR_MANY_LABELS:
 			printf("Erro sintatico -> rotulos demais\n");
+			break;
 		case  ERR_REP_LABEL:
 			printf("Erro semantico -> rotulo re-declarado\n");
 			break;
@@ -231,9 +246,13 @@ void print_symbols_table(symbols_table* table){
 
 void print_inst(inst_list *il)
 {
-	printf("\nIndex: %3d",il->index);
-	printf("\nType: %3d",il->type);
-	printf("\nValues:\top = %3d\n\trs = %3d\n\trt = %3d\n\trd = %3d\n\tshamt = %3d\n\tfunct = %3d\n\timm = %d",
+	while(il != NULL){
+		printf("\nIndex: %3d",il->index);
+		printf("\nLine: %3d",il->code_line);
+		printf("\nType: %3d",il->type);
+		printf("\nValues:\top = %3d\n\trs = %3d\n\trt = %3d\n\trd = %3d\n\tshamt = %3d\n\tfunct = %3d\n\timm = %d",
 			il->values.op,il->values.rs,il->values.rt,il->values.rd,il->values.imm,il->values.funct,il->values.imm);
+		il = il->next;
+	}
 			return;
 }

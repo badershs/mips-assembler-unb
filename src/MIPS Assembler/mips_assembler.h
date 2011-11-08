@@ -64,9 +64,10 @@
 #define ERR_MISS_COMMA			(0x27)		/* Missing expected comma   	  */
 #define ERR_MANY_COMMA			(0x28)		/* Comma used in wrong way  	  */
 #define ERR_INV_IMM				(0x30)		/* Invalid size of immediate 	  */
-#define ERR_NO_LABEL			(0x31)		/* Label called nonexistent 	  */
-#define ERR_DUP_LABEL			(0x32)		/* Duplicated label			 	  */
-#define ERR_ZERO_REG			(0x33)		/* Register ZERO set as target 	  */
+#define ERR_NEG_UNS				(0x31)		/* Negative arg in unsigned inst  */
+#define ERR_NO_LABEL			(0x32)		/* Label called nonexistent 	  */
+#define ERR_DUP_LABEL			(0x33)		/* Duplicated label			 	  */
+#define ERR_ZERO_REG			(0x34)		/* Register ZERO set as target 	  */
 #define ERR_INV_DIRECT			(0x40)		/* Invalid directive 			  */
 #define ERR_HELP_MENU			(0x41)		/* Display Help menu 			  */
 #define ERR_VERSION				(0x42)		/* Display assembler's version	  */

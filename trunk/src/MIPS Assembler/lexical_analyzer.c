@@ -86,6 +86,10 @@ int lexical_analysis(FILE* file, token_list** list, symbols_table** s_table)
 				If yes, remove the closing bracket from the string list and set
 				the 'encapsulated' flag */
 			else if(*(line_tokens->string) == '('){
+				if(line_tokens->next == NULL) 
+					print_error_msg(code_count, ERR_MISA_BRACKET);
+				if(line_tokens->next->next == NULL) 
+					print_error_msg(code_count, ERR_MISA_BRACKET);
 				if(*(line_tokens->next->next->string) == ')'){
 					if(*(line_tokens->next->string) == '$'){
 						line_tokens->next->next = line_tokens->next->next->next;

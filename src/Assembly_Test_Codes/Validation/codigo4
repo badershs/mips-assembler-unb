@@ -1,0 +1,3 @@
+addi $s3, $0, 1200
+label1: add $t1, $s3, $t0
+label1: sub $t2, $s3, $0

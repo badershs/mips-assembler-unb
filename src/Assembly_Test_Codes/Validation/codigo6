@@ -1,0 +1,5 @@
+addi $t0, $0, 400
+addi $s3, $0, 1200
+sw $t0, 80($s3)
+j label1
+label1: add $t1, $s3, $t0

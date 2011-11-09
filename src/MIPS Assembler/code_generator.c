@@ -15,12 +15,16 @@
 
 extern uint8_t gflag_binary;
 
+uint8_t first_line;
+
 int code_generator(inst_list* i_list, FILE* output_file) {
 	
 	uint32_t inst;
 	char* bin;
 	inst_list* p;
 	p=i_list;
+	
+	first_line = 1;
 	
 	while(p!=NULL)
 	{
@@ -49,7 +53,12 @@ int code_generator(inst_list* i_list, FILE* output_file) {
 			fwrite(&inst, 4, 1, output_file);
 		else{
 			binario(inst, &bin);
-			fprintf(output_file,"%s\n",bin);
+			if(first_line){
+				first_line = 0;
+				fprintf(output_file,"%s",bin);
+			}
+			else
+				fprintf(output_file,"\n%s",bin);
 		}
 		p=p->next;
 	}

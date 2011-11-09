@@ -42,56 +42,73 @@ void print_error_msg(uint32_t line, uint8_t error)
 	
 	switch(error){
 		case  ERR_TK_INV:
-			printf("Erro lexico -> token invalido\n");
+			printf("Erro léxico -> caractere inválido encontrado\n");
+			printf("      símbolos devem conter apenas caracteres alfanumericos, '.' ou '_'\n");
 			break;
 		case  ERR_TK_REG_INV:
-			printf("Erro lexico -> registrador invalido\n");
+			printf("Erro léxico -> registrador inválido\n");
 			break;
 		case  ERR_TK_IMM_INV:
-			printf("Erro lexico -> imediato invalido\n");
+			printf("Erro léxico -> símbolos não podem iniciar com dígitos\n");
 			break;
 		case  ERR_TK_SYMBOL_INV:
-			printf("Erro lexico -> símbolo invalido\n");
+			printf("Erro léxico -> símbolo excede o limite de 31 caracteres\n");
 			break;
 		case  ERR_MISA_BRACKET:
-			printf("Erro sintatico -> parenteses desalinhados\n");
+			printf("Erro sintático -> parênteses desalinhados\n");
 			break;
 		case  ERR_MISP_BRACKET:
-			printf("Erro sintatico -> parenteses sobrando\n");
+			printf("Erro sintático -> token entre parênteses não é do tipo registrador\n");
 			break;
 		case  ERR_MISP_COLON:
-			printf("Erro lexico -> caractere ':' fora de rótulo\n");
+			printf("Erro léxico -> caractere ':' não acompanha token do tipo label\n");
 			break;
 		case  ERR_MISS_BRACKET:
-			printf("Erro sintatico -> parenteses faltano\n");
+			printf("Erro sintático -> falta de parênteses encapsulando o registrador\n");
 			break;
 		case  ERR_EXTRA_BRACKET:
-			printf("Erro sintatico -> parenteses sobrando\n");
+			printf("Erro sintático -> o registrador não deve estar entre parênteses\n");
 			break;
 		case  ERR_MANY_ARG:
-			printf("Erro sintatico -> argumentos sobrando\n");
+			printf("Erro sintático -> argumentos de mais\n");
 			break;
 		case  ERR_FEW_ARG:
-			printf("Erro sintatico -> argumentos faltando\n");
+			printf("Erro sintático -> argumentos de menos\n");
 			break;
 		case  ERR_TYPE_ARG:
-			printf("Erro sintatico -> argumento de tipo incorreto\n");
+			printf("Erro sintático -> tipo de argumento incorreto\n");
 			break;
 		case  ERR_MISS_INST:
-			printf("Erro sintatico -> instrucao faltando\n");
-			break;
 		case  ERR_INV_INST:
-			printf("Erro sintatico -> instrucao invalida\n");
+			printf("Erro sintático -> linha não contém uma instrução válida\n");
 			break;
 		case  ERR_MANY_LABELS:
-			printf("Erro sintatico -> rotulos demais\n");
+			printf("Erro sintático -> dois labels na mesma linha\n");
 			break;
-		case  ERR_REP_LABEL:
-			printf("Erro semantico -> rotulo re-declarado\n");
+		case  ERR_MISS_COMMA:
+			printf("Erro sintático -> ',' faltando entre os operandos\n");
+			break;
+		case  ERR_MANY_COMMA:
+			printf("Erro sintático -> ',' sobrando\n");
+			break;
+		case  ERR_INV_IMM:
+			printf("Erro semântico -> imediato ultrapassa os limites\n");
+			break;
+		case  ERR_NEG_UNS:
+			printf("Erro semântico -> instrução do tipo unsigned com imediato negativo\n");
+			break;
+		case  ERR_NO_LABEL:
+			printf("Erro semântico -> o label chamado não está declarado\n");
+			break;
+		case  ERR_DUP_LABEL:
+			printf("Erro semântico -> label já declarado\n");
+			break;
+		case  ERR_ZERO_REG:
+			printf("Erro semântico -> tentativa de modificar o conteúdo do registrador $zero\n");
 			break;
 		case  ERR_INV_DIRECT:
-			printf("gmag: opcao desconhecida\n");
-			printf("      Para informacoes sobre diretivas, digite './gmag --help'\n");
+			printf("gmag: opção desconhecida\n");
+			printf("      Para informações sobre diretivas, digite './gmag --help'\n");
 			break;
 		case  ERR_HELP_MENU: 
 			for(i = 0; i < SIZE_HELP_MENU; i++)
@@ -101,31 +118,34 @@ void print_error_msg(uint32_t line, uint8_t error)
 			printf("%s\n",VERSION);
 			break;
 		case ERR_ABOUT:
-			printf("desenvolvido por Geraldes, A.A.; Melo, N.C.; Gouveia, D.C.; Angelo, C.G.\n");
-			printf("Novembro de 2011 - Universidade de Brasilia\n");
+			printf("desenvolvido por Geraldes, A.A.; Melo, N.C.; Angelo, C.G.; Gouveia, D.C.\n");
+			printf("Novembro de 2011 - Universidade de Brasília\n");
 			break;
 		case  ERR_NO_OUT_NAME:
-			printf("gmag: diretiva '-o' deve ser seguida do nome do arquivo de saida\n");
+			printf("gmag: diretiva '-o' deve ser seguida do nome do arquivo de saída\n");
 			break;
 		case  ERR_NO_DIR:			
-			printf("gmag: diretiva '-B'deve ser seguida de um diretorio\n");
+			printf("gmag: diretiva '-B' deve ser seguida de um diretório\n");
 			break;
 		case  ERR_NO_FILE: 
 			printf("gmag: arquivo de entrada faltando\n");
 			break;
 		case  ERR_MANY_FILE:
-			printf("gmag: arquivos de entrada demais\n");
+			printf("gmag: arquivos de entrada de mais\n");
 			break;
 		case  ERR_INV_FILE:
-			printf("gmag: nao foi possivel abrir o arquivo de entrada\n");
+			printf("gmag: não foi possiível abrir o arquivo de entrada\n");
 			break;
+		case  ERR_INV_OUT_FILE:
+			printf("gmag: não foi possiível abrir o arquivo de saída\n");
+			break;			
 		case  ERR_ANALYZE_DONE:
-			printf("gmag: nenhum erro encontrado no codigo fonte\n");
+			printf("gmag: nenhum erro encontrado no código fonte\n");
 			break;
-		default: 
-			printf("ERROR CODE = %d\n", error);
+		default:
+			printf("Erro code = %d\n",error);
+			break;
 	}
-	
 	exit(1);
 }
 

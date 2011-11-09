@@ -101,6 +101,11 @@ int parsing(token_list* tk_list, inst_list** il_out) /* input, output ; returns 
 					includeininst(sintaxe[code_sint][i],tok->value,&next_inst); 
 				}
 				else if( tok->type==TK_SYMBOL ) { next_inst->values.symbol=tok->value_s;}
+				
+				if(i == 4){
+					if(tok->next != NULL)
+						print_error_msg(line, ERR_MANY_ARG);
+				}
 			}
 		
 			if(first_inst == NULL)

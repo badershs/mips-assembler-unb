@@ -43,6 +43,5 @@ comparer: comparer.o
 comparer.o: comparer.c 
 	$(CC) $(CFLAGS) comparer.c
 
-
 clean:
-	rm -rf gmag *.o *~
+	rm -rf gmag comparer *.o *~ *.bin.txt

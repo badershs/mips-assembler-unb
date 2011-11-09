@@ -60,7 +60,6 @@
 #define ERR_MISS_INST			(0x23)		/* Missing instruction	    	  */
 #define ERR_INV_INST			(0x24)		/* Invalid instruction	    	  */
 #define ERR_MANY_LABELS			(0x25)		/* Too many labels	   			  */
-#define ERR_REP_LABEL			(0x26)		/* Redeclared label 			  */
 #define ERR_MISS_COMMA			(0x27)		/* Missing expected comma   	  */
 #define ERR_MANY_COMMA			(0x28)		/* Comma used in wrong way  	  */
 #define ERR_INV_IMM				(0x30)		/* Invalid size of immediate 	  */

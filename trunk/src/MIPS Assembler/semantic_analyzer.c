@@ -77,7 +77,7 @@ uint32_t semantic_analysis(inst_list *first_inst, symbols_table *sym_list)
 		}
 		
 		/* Verification whether the register ZERO is tried to be modified */
-		if((stype=STYPE_R1)||(stype==STYPE_R5)||(stype==STYPE_R6)){
+		if((stype==STYPE_R1)||(stype==STYPE_R5)||(stype==STYPE_R6)){
 			if(cur_inst->values.rd==0)
 				print_error_msg(cur_inst->code_line, ERR_ZERO_REG);
 		}
@@ -107,24 +107,7 @@ uint32_t semantic_analysis(inst_list *first_inst, symbols_table *sym_list)
 			if(cur_inst->values.imm> MAX_IMM_26)
 				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
 		}
-			
-		/*if(cur_inst->stype==STYPE_R5){
-			if((cur_inst->values.imm < MIN_IMMU_5)||(cur_inst->values.imm> MAX_IMMU_5))
-				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
-		}
-		if((op == OP_ADDI) || (op == OP_ANDI) || (op == OP_ORI) || (op == OP_SLTI) || (op == OP_XORI) || (cur_inst->stype==STYPE_I3)){
-			if((cur_inst->values.imm < MIN_IMM_16)||(cur_inst->values.imm> MAX_IMM_16))
-				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
-		}
-		if((op == OP_ADDIU) || (op == OP_SLTIU)){
-			if((cur_inst->values.imm < MIN_IMMU_16)||(cur_inst->values.imm> MAX_IMMU_16))
-				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
-		}
-		if(cur_inst->stype==STYPE_J2){
-			if((cur_inst->values.imm < MIN_IMMU_26)||(cur_inst->values.imm> MAX_IMMU_26))
-				print_error_msg(cur_inst->code_line, ERR_INV_IMM);
-		}*/
-
+		
 		/* Take the next instruction */
 		cur_inst=cur_inst->next;
 	}

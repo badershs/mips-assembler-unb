@@ -1,0 +1,5 @@
+http://courses.engr.illinois.edu/ece390/books/labmanual/c-prog-mixing.html
+
+http://www.dre.vanderbilt.edu/~sutambe/documents/misc_c11.htm
+
+http://msdn.microsoft.com/en-us/library/y8b57x4b.aspx
